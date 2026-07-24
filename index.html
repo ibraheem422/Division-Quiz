@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +7,22 @@
   <style>
     :root {
       color-scheme: light;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --border-color: #cbd5e1;
+      --card-shadow: rgba(0, 0, 0, 0.15);
+    }
+
+    :root.dark-mode {
+      color-scheme: dark;
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --border-color: #475569;
+      --card-shadow: rgba(0, 0, 0, 0.5);
     }
 
     * { box-sizing: border-box; }
@@ -21,15 +36,22 @@
       justify-content: center;
       align-items: center;
       padding: 20px;
+      color: var(--text-primary);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    :root.dark-mode body {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
     }
 
     .card {
-      background: white;
+      background: var(--bg-primary);
       border-radius: 18px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 12px 30px var(--card-shadow);
       width: min(94vw, 520px);
       padding: 24px;
       text-align: center;
+      transition: background 0.3s ease;
     }
 
     h1, h2 { margin-top: 0; color: #1d4ed8; }
@@ -40,10 +62,13 @@
     .input {
       width: 100%;
       padding: 12px;
-      border: 2px solid #cbd5e1;
+      border: 2px solid var(--border-color);
       border-radius: 10px;
       font-size: 1rem;
       margin: 8px 0 12px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      transition: all 0.2s ease;
     }
 
     .form-group {
@@ -54,7 +79,7 @@
     .form-group label {
       display: block;
       margin-bottom: 6px;
-      color: #334155;
+      color: var(--text-secondary);
       font-weight: bold;
     }
 
@@ -76,6 +101,59 @@
       border-color: #2563eb;
       color: #1d4ed8;
       font-weight: bold;
+    }
+
+    .dark-mode-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 12px 0;
+      justify-content: center;
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 28px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #cbd5e1;
+      transition: 0.4s;
+      border-radius: 28px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #2563eb;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(22px);
     }
 
     .btn-row {
@@ -133,7 +211,40 @@
       color: #0f172a;
     }
 
-    .options {
+    .timer-display {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: #f3f4f6;
+      color: #1d4ed8;
+    }
+
+    .timer-display.warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .timer-display.danger {
+      background: #fee2e2;
+      color: #dc2626;
+      animation: pulse 0.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .quiz-difficulty {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
@@ -240,11 +351,32 @@
         <button class="difficulty-btn" data-difficulty="medium">Medium</button>
         <button class="difficulty-btn" data-difficulty="hard">Hard</button>
       </div>
+      <div class="btn-row">
+        <button id="start-btn" class="primary-btn">Practice</button>
+      </div>
+      <div class="btn-row" style="margin-top:12px;">
+        <button id="leaderboard-btn" class="secondary-btn">Leaderboard</button>
+        <button id="settings-btn" class="secondary-btn">Settings</button>
+      </div>
+    </div>
+
+    <div id="settings-screen" class="screen hidden">
+      <h2>Settings</h2>
+      <div id="site-message-settings" class="status-message hidden"></div>
+      
       <div id="profile-area" class="welcome" style="text-align:left;">
         <p><strong>Name:</strong> <span id="profile-name">-</span></p>
         <p><strong>Email:</strong> <span id="profile-email">-</span></p>
-        <button id="edit-profile-btn" class="secondary-btn">Edit Profile</button>
       </div>
+
+      <div class="dark-mode-toggle">
+        <label for="dark-mode-checkbox">Dark Mode</label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="dark-mode-checkbox" />
+          <span class="slider"></span>
+        </label>
+      </div>
+
       <div id="profile-edit-area" class="hidden" style="text-align:left;">
         <div class="form-group">
           <label for="profile-name-input">Full Name</label>
@@ -263,16 +395,22 @@
           <button id="cancel-profile-btn" class="secondary-btn">Cancel</button>
         </div>
       </div>
-      <div class="btn-row">
-        <button id="start-btn" class="primary-btn">Practice</button>
+
+      <div id="edit-profile-btn-container" class="btn-row">
+        <button id="edit-profile-btn" class="secondary-btn">Edit Profile</button>
       </div>
+
       <div class="btn-row" style="margin-top:12px;">
-        <button id="leaderboard-btn" class="secondary-btn">Leaderboard</button>
         <button id="export-btn" class="secondary-btn">Export Data</button>
         <label class="secondary-btn" style="cursor:pointer;">
           Import Data
           <input id="import-file" type="file" accept="application/json" style="display:none" />
         </label>
+      </div>
+
+      <div class="btn-row" style="margin-top:20px;">
+        <button id="back-home-btn" class="primary-btn">Back to Home</button>
+        <button id="logout-btn" class="secondary-btn" style="background: #ef4444; color: white;">Logout</button>
       </div>
     </div>
 
@@ -284,6 +422,8 @@
         </div>
       </div>
       <h2>Division Quiz</h2>
+      <div class="quiz-difficulty" id="difficulty-indicator"></div>
+      <div class="timer-display" id="timer-display">Time: 30s</div>
       <div class="stats">
         <span id="question-counter">Question 1/10</span>
         <span id="score">Score: 0</span>
@@ -351,6 +491,7 @@
     const loginScreen = document.getElementById('login-screen');
     const homeScreen = document.getElementById('home-screen');
     const quizScreen = document.getElementById('quiz-screen');
+    const settingsScreen = document.getElementById('settings-screen');
 
     const nameInput = document.getElementById('name');
     const nameGroup = document.getElementById('name-group');
@@ -384,6 +525,13 @@
     const practiceBanner = document.getElementById('practice-banner');
     const homeBtn = document.getElementById('home-btn');
     const siteMessageEl = document.getElementById('site-message');
+    const siteMessageSettingsEl = document.getElementById('site-message-settings');
+    const settingsBtn = document.getElementById('settings-btn');
+    const backHomeBtn = document.getElementById('back-home-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const darkModeCheckbox = document.getElementById('dark-mode-checkbox');
+    const timerDisplay = document.getElementById('timer-display');
+    const difficultyIndicator = document.getElementById('difficulty-indicator');
 
     let playerName = '';
     let selectedDifficulty = 'easy';
@@ -395,6 +543,9 @@
     let questions = [];
     let account = null;
     let isPracticing = false;
+    let quizStartTime = null;
+    let timeRemaining = 30;
+    let timerInterval = null;
 
     const difficultySettings = {
       easy: { label: 'Easy', maxDivisor: 5, maxQuotient: 10, totalQuestions: 10 },
@@ -406,6 +557,7 @@
       loginScreen.classList.add('hidden');
       homeScreen.classList.add('hidden');
       quizScreen.classList.add('hidden');
+      settingsScreen.classList.add('hidden');
       screen.classList.remove('hidden');
     }
 
@@ -472,6 +624,12 @@
       nextBtn.classList.add('hidden');
       homeBtn.classList.add('hidden');
 
+      // Set up timer
+      timeRemaining = 30;
+      clearInterval(timerInterval);
+      updateTimerDisplay();
+      timerInterval = setInterval(updateTimer, 1000);
+
       const answers = new Set([q.answer]);
       while (answers.size < 4) {
         const distractor = q.answer + randomInt(-4, 4);
@@ -491,6 +649,25 @@
         btn.addEventListener('click', () => checkAnswer(value));
         optionsEl.appendChild(btn);
       });
+    }
+
+    function updateTimer() {
+      timeRemaining--;
+      updateTimerDisplay();
+      if (timeRemaining <= 0) {
+        clearInterval(timerInterval);
+        checkAnswer(-1); // Auto-fail the question
+      }
+    }
+
+    function updateTimerDisplay() {
+      timerDisplay.textContent = `Time: ${timeRemaining}s`;
+      timerDisplay.classList.remove('warning', 'danger');
+      if (timeRemaining <= 5) {
+        timerDisplay.classList.add('danger');
+      } else if (timeRemaining <= 10) {
+        timerDisplay.classList.add('warning');
+      }
     }
 
     function checkAnswer(selected) {
@@ -514,8 +691,21 @@
     }
 
     function finishQuiz() {
+      clearInterval(timerInterval);
+      const timeTaken = Math.floor((Date.now() - quizStartTime) / 1000);
+      const minutes = Math.floor(timeTaken / 60);
+      const seconds = timeTaken % 60;
+      const percentage = Math.round((score / totalQuestions) * 100);
+      
+      const timeStr = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+      
       questionEl.textContent = `Quiz complete! ${playerName || 'Player'} scored ${score} out of ${totalQuestions}.`;
-      optionsEl.innerHTML = '';
+      optionsEl.innerHTML = `
+        <div style="grid-column: 1/-1; padding: 12px; background: #f0f4f8; border-radius: 8px;">
+          <p><strong>Accuracy:</strong> ${percentage}%</p>
+          <p><strong>Time Taken:</strong> ${timeStr}</p>
+        </div>
+      `;
       questionCounterEl.textContent = 'Finished';
       scoreEl.textContent = `Score: ${score}`;
       feedbackEl.textContent = 'Great effort!';
@@ -525,6 +715,8 @@
       endPracticeTopBtn.classList.add('hidden');
       practiceBanner.classList.add('hidden');
       homeBtn.classList.remove('hidden');
+      timerDisplay.textContent = `Completed in ${timeStr}`;
+      timerDisplay.classList.remove('warning', 'danger');
       // save to leaderboard
       try { addToLeaderboard(playerName || 'Player', score, selectedDifficulty); } catch (e) { console.warn('Failed to add to leaderboard', e); }
       isPracticing = false;
@@ -533,7 +725,10 @@
     function startQuiz() {
       currentQuestion = 0;
       score = 0;
+      quizStartTime = Date.now();
       buildQuestions();
+      const difficultyLabel = difficultySettings[selectedDifficulty].label;
+      difficultyIndicator.textContent = `${difficultyLabel} Mode`;
       showQuestion();
       showScreen(quizScreen);
       isPracticing = true;
@@ -582,6 +777,20 @@
       return false;
     }
 
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', isDark);
+      darkModeCheckbox.checked = isDark;
+    }
+
+    function loadDarkModePreference() {
+      const isDark = localStorage.getItem('darkMode') === 'true';
+      if (isDark) {
+        document.documentElement.classList.add('dark-mode');
+        darkModeCheckbox.checked = true;
+      }
+    }
+
     function handleAuth() {
       const email = emailInput.value.trim();
       const password = passwordInput.value.trim();
@@ -628,7 +837,7 @@
       const newPassword = profilePasswordInput.value.trim();
 
       if (!newName || !newEmail) {
-        authMessage.textContent = 'Name and email are required to save your profile.';
+        showSiteMessageSettings('Name and email are required to save your profile.', 'error');
         return;
       }
 
@@ -642,11 +851,32 @@
       welcomeMessage.textContent = `${playerName}, choose a difficulty and start practicing.`;
       updateProfileDisplay();
       closeProfileEdit();
+      showSiteMessageSettings('Profile saved successfully!', 'success');
     });
     cancelProfileBtn.addEventListener('click', () => {
       closeProfileEdit();
     });
     startBtn.addEventListener('click', startQuiz);
+    settingsBtn.addEventListener('click', () => {
+      closeProfileEdit();
+      showScreen(settingsScreen);
+    });
+    backHomeBtn.addEventListener('click', () => {
+      closeProfileEdit();
+      showScreen(homeScreen);
+    });
+    logoutBtn.addEventListener('click', () => {
+      showConfirmModal('Logout', 'Are you sure you want to logout?', () => {
+        account = null;
+        playerName = '';
+        localStorage.removeItem('divisionQuizAccount');
+        showScreen(loginScreen);
+        emailInput.value = '';
+        passwordInput.value = '';
+        nameInput.value = '';
+      });
+    });
+    darkModeCheckbox.addEventListener('change', toggleDarkMode);
 
     difficultyButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -747,7 +977,13 @@
 
     function addToLeaderboard(name, scoreVal, difficulty) {
       const list = getLeaderboard();
-      list.push({ name: name || 'Player', score: Number(scoreVal) || 0, difficulty: difficulty || 'easy', date: new Date().toISOString() });
+      list.push({ 
+        name: name || 'Player', 
+        score: Number(scoreVal) || 0, 
+        totalQuestions: totalQuestions,
+        difficulty: difficulty || 'easy', 
+        date: new Date().toISOString() 
+      });
       list.sort((a, b) => b.score - a.score || new Date(b.date) - new Date(a.date));
       saveLeaderboard(list);
     }
@@ -755,15 +991,21 @@
     function renderLeaderboard() {
       const list = getLeaderboard();
       leaderboardTableBody.innerHTML = '';
-      if (!list.length) {
+      
+      // Sort and filter: show top 10 overall
+      const topScores = list
+        .sort((a, b) => b.score - a.score || new Date(b.date) - new Date(a.date))
+        .slice(0, 10);
+      
+      if (!topScores.length) {
         const tr = document.createElement('tr');
         tr.innerHTML = '<td colspan="4" style="padding:8px;">No results yet.</td>';
         leaderboardTableBody.appendChild(tr);
         return;
       }
-      list.forEach(entry => {
+      topScores.forEach((entry, idx) => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td style="padding:6px;">${entry.name}</td><td style="padding:6px;">${entry.score}</td><td style="padding:6px;">${entry.difficulty}</td><td style="padding:6px;">${new Date(entry.date).toLocaleString()}</td>`;
+        tr.innerHTML = `<td style="padding:6px;">#${idx + 1} ${entry.name}</td><td style="padding:6px;">${entry.score}/${entry.totalQuestions || 10}</td><td style="padding:6px;"><strong>${entry.difficulty}</strong></td><td style="padding:6px;">${new Date(entry.date).toLocaleString()}</td>`;
         leaderboardTableBody.appendChild(tr);
       });
     }
@@ -785,6 +1027,16 @@
       siteMessageEl.classList.remove('hidden');
       setTimeout(() => {
         if (siteMessageEl) siteMessageEl.classList.add('hidden');
+      }, 5000);
+    }
+
+    function showSiteMessageSettings(message, type = 'success') {
+      if (!siteMessageSettingsEl) return;
+      siteMessageSettingsEl.textContent = message;
+      siteMessageSettingsEl.className = `status-message ${type === 'error' ? 'status-error' : 'status-success'}`;
+      siteMessageSettingsEl.classList.remove('hidden');
+      setTimeout(() => {
+        if (siteMessageSettingsEl) siteMessageSettingsEl.classList.add('hidden');
       }, 5000);
     }
 
@@ -810,8 +1062,19 @@
       reader.onload = () => {
         try {
           const data = JSON.parse(reader.result);
+          const hasAccount = data && typeof data === 'object' && data.account && typeof data.account === 'object';
+          const hasLeaderboard = data && typeof data === 'object' && Array.isArray(data.leaderboard);
+          if (!hasAccount && !hasLeaderboard) {
+            showSiteMessage('File does not contain valid account or leaderboard data.', 'error');
+            return;
+          }
           showConfirmModal('Import Data', 'Importing will overwrite existing account and leaderboard. Continue?', () => {
-            importData(data);
+            const ok = importData(data);
+            if (ok) {
+              showSiteMessage('Import completed successfully.', 'success');
+            } else {
+              showSiteMessage('No valid data found to import.', 'error');
+            }
           });
         } catch (err) {
           showSiteMessage('Invalid JSON file.', 'error');
@@ -823,15 +1086,16 @@
     }
 
     function importData(obj) {
-      if (!obj || typeof obj !== 'object') return;
-      if (obj.account) {
-        try { localStorage.setItem('divisionQuizAccount', JSON.stringify(obj.account)); account = obj.account; playerName = account.fullName; } catch (e) { console.warn(e); }
+      if (!obj || typeof obj !== 'object') return false;
+      let changed = false;
+      if (obj.account && typeof obj.account === 'object') {
+        try { localStorage.setItem('divisionQuizAccount', JSON.stringify(obj.account)); account = obj.account; playerName = account.fullName; changed = true; } catch (e) { console.warn(e); }
       }
       if (Array.isArray(obj.leaderboard)) {
-        try { localStorage.setItem('divisionQuizLeaderboard', JSON.stringify(obj.leaderboard)); } catch (e) { console.warn(e); }
+        try { localStorage.setItem('divisionQuizLeaderboard', JSON.stringify(obj.leaderboard)); changed = true; } catch (e) { console.warn(e); }
       }
-      updateProfileDisplay();
-      showSiteMessage('Import completed successfully.', 'success');
+      if (changed) updateProfileDisplay();
+      return changed;
     }
 
     if (leaderboardBtn) leaderboardBtn.addEventListener('click', showLeaderboardModal);
@@ -844,6 +1108,7 @@
     if (!hasStoredAccount) {
       showScreen(loginScreen);
     }
+    loadDarkModePreference();
     updateAuthMode('login');
     updateDifficultyButtons();
   </script>
