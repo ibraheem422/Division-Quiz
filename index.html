@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Division Quiz</title>
+  <title>Division Practice Quiz - Master Division Skills</title>
   <style>
     :root {
       color-scheme: light;
@@ -245,6 +245,43 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
+
+    .high-score-box {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 12px 0;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .keyboard-hint {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .profile-notes {
+      background: var(--bg-secondary);
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      margin: 12px 0;
+      text-align: left;
+      color: var(--text-secondary);
+      max-height: 80px;
+      overflow-y: auto;
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    .share-btn-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
@@ -312,6 +349,108 @@
     .correct { color: #15803d; }
     .wrong { color: #dc2626; }
 
+    /* Terms & Conditions */
+    .terms-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    .terms-modal-box {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      padding: 24px;
+      border-radius: 12px;
+      width: min(92vw, 500px);
+      max-height: 70vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 40px var(--card-shadow);
+      border: 2px solid var(--border-color);
+    }
+    .terms-title {
+      font-size: 1.5rem;
+      color: #1d4ed8;
+      margin-bottom: 16px;
+      margin-top: 0;
+    }
+    .terms-content {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+    .terms-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .terms-close-btn {
+      background: #2563eb;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .terms-close-x {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: var(--text-primary);
+      cursor: pointer;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+
+    .terms-close-x:hover {
+      transform: scale(1.2);
+    }
+
+    .terms-checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 12px 0;
+      text-align: left;
+    }
+
+    .terms-checkbox-container input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .terms-checkbox-container label {
+      margin: 0;
+      font-size: 0.95rem;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+
+    .terms-link {
+      color: #2563eb;
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .terms-link:hover {
+      color: #1d4ed8;
+    }
+
     @media (max-width: 480px) {
       .options { grid-template-columns: 1fr; }
       .btn-row { flex-direction: column; }
@@ -339,6 +478,12 @@
         <label for="password">Password</label>
         <input id="password" class="input" type="password" placeholder="Enter your password" />
       </div>
+      <div class="terms-checkbox-container hidden" id="terms-container">
+        <input type="checkbox" id="terms-checkbox" />
+        <label for="terms-checkbox">
+          I agree to the <span class="terms-link" id="view-terms-link">Terms and Conditions</span>
+        </label>
+      </div>
       <button id="auth-btn" class="primary-btn">Login</button>
     </div>
 
@@ -351,8 +496,12 @@
         <button class="difficulty-btn" data-difficulty="medium">Medium</button>
         <button class="difficulty-btn" data-difficulty="hard">Hard</button>
       </div>
+      <div id="high-score-display" class="high-score-box hidden">
+        🏆 Best Score: <span id="best-score-value">0</span>
+      </div>
       <div class="btn-row">
-        <button id="start-btn" class="primary-btn">Practice</button>
+        <button id="start-btn" class="primary-btn">Start Practice</button>
+        <button id="resume-btn" class="primary-btn hidden">Resume Practice</button>
       </div>
       <div class="btn-row" style="margin-top:12px;">
         <button id="leaderboard-btn" class="secondary-btn">Leaderboard</button>
@@ -390,6 +539,10 @@
           <label for="profile-password-input">Password</label>
           <input id="profile-password-input" class="input" type="password" placeholder="Enter new password" />
         </div>
+        <div class="form-group">
+          <label for="profile-notes-input">Personal Notes</label>
+          <textarea id="profile-notes-input" class="input" placeholder="Add personal notes or goals" style="resize: vertical; min-height: 80px;"></textarea>
+        </div>
         <div class="btn-row">
           <button id="save-profile-btn" class="primary-btn">Save</button>
           <button id="cancel-profile-btn" class="secondary-btn">Cancel</button>
@@ -406,6 +559,7 @@
           Import Data
           <input id="import-file" type="file" accept="application/json" style="display:none" />
         </label>
+        <button id="view-terms-settings-btn" class="secondary-btn">View Terms</button>
       </div>
 
       <div class="btn-row" style="margin-top:20px;">
@@ -433,6 +587,7 @@
       <div id="feedback" class="feedback"></div>
       <div class="btn-row">
         <button id="next-btn" class="primary-btn hidden">Next Question</button>
+        <button id="share-score-btn" class="secondary-btn hidden">Share Score</button>
         <button id="end-practice-btn" class="secondary-btn hidden">End Practice</button>
         <button id="home-btn" class="secondary-btn hidden">Back to Home</button>
       </div>
@@ -478,6 +633,44 @@
     </div>
   </div>
 
+  <!-- Terms and Conditions Modal -->
+  <div id="terms-modal" class="hidden" aria-hidden="true">
+    <div class="terms-modal-overlay">
+      <div class="terms-modal-box" role="dialog" aria-modal="true" style="position: relative;">
+        <button id="terms-close-x" class="terms-close-x" aria-label="Close terms">&times;</button>
+        <h3 class="terms-title">Terms and Conditions</h3>
+        <div class="terms-content">
+          <h4>1. Acceptance of Terms</h4>
+          <p>By creating an account and using this Division Practice application, you agree to comply with these Terms and Conditions. If you do not agree, please do not use the service.</p>
+
+          <h4>2. User Accounts</h4>
+          <p>You are responsible for maintaining the confidentiality of your login credentials and account information. You agree to use the application only for lawful purposes and in a way that does not infringe the rights of others.</p>
+
+          <h4>3. Intellectual Property</h4>
+          <p>All content, features, and functionality of this application are provided as-is. You may use this application for personal, educational purposes only.</p>
+
+          <h4>4. User Data and Privacy</h4>
+          <p>Your account information and quiz scores are stored locally on your device. No personal data is collected, stored, or transmitted to external servers. You have full control over your data through export and import features.</p>
+
+          <h4>5. Educational Use</h4>
+          <p>This application is designed for educational purposes to help practice division skills. Users assume all responsibility for how they use this tool and the results obtained.</p>
+
+          <h4>6. Limitation of Liability</h4>
+          <p>This application is provided "as-is" without warranties of any kind. The developer is not liable for any damages arising from the use or inability to use the application.</p>
+
+          <h4>7. Modifications to Terms</h4>
+          <p>We reserve the right to modify these Terms and Conditions at any time. Your continued use of the application constitutes acceptance of any changes.</p>
+
+          <h4>8. Termination</h4>
+          <p>You may terminate your account at any time by using the logout feature. Accounts that violate these terms may be subject to restrictions.</p>
+        </div>
+        <div class="terms-actions">
+          <button id="terms-close-btn" class="terms-close-btn">I Agree</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     console.log('division-quiz script starting');
     window.addEventListener('error', (e) => {
@@ -512,7 +705,19 @@
     const saveProfileBtn = document.getElementById('save-profile-btn');
     const cancelProfileBtn = document.getElementById('cancel-profile-btn');
     const startBtn = document.getElementById('start-btn');
+    const resumeBtn = document.getElementById('resume-btn');
+    const highScoreDisplay = document.getElementById('high-score-display');
+    const bestScoreValue = document.getElementById('best-score-value');
+    const shareScoreBtn = document.getElementById('share-score-btn');
     const difficultyButtons = document.querySelectorAll('.difficulty-btn');
+    const profileNotesInput = document.getElementById('profile-notes-input');
+    const termsCheckbox = document.getElementById('terms-checkbox');
+    const termsContainer = document.getElementById('terms-container');
+    const viewTermsLink = document.getElementById('view-terms-link');
+    const viewTermsSettingsBtn = document.getElementById('view-terms-settings-btn');
+    const termsModal = document.getElementById('terms-modal');
+    const termsCloseBtn = document.getElementById('terms-close-btn');
+    const termsCloseXBtn = document.getElementById('terms-close-x');
 
     const questionEl = document.getElementById('question');
     const optionsEl = document.getElementById('options');
@@ -570,6 +775,18 @@
         ? 'Log in to continue your division practice.'
         : 'Create an account with your name, email, and password.';
       nameGroup.classList.toggle('hidden', authMode !== 'signup');
+      termsContainer.classList.toggle('hidden', authMode !== 'signup');
+      termsCheckbox.checked = false;
+    }
+
+    function showTermsModal() {
+      termsModal.classList.remove('hidden');
+      termsModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function hideTermsModal() {
+      termsModal.classList.add('hidden');
+      termsModal.setAttribute('aria-hidden', 'true');
     }
 
     function updateDifficultyButtons() {
@@ -803,6 +1020,11 @@
         return;
       }
 
+      if (authMode === 'signup' && !termsCheckbox.checked) {
+        authMessage.textContent = 'You must agree to the Terms and Conditions to sign up.';
+        return;
+      }
+
       if (authMode === 'signup') {
         account = { fullName, email, password };
         saveAccount();
@@ -830,6 +1052,10 @@
     authBtn.addEventListener('click', handleAuth);
     showLoginBtn.addEventListener('click', () => updateAuthMode('login'));
     showSignupBtn.addEventListener('click', () => updateAuthMode('signup'));
+    viewTermsLink.addEventListener('click', showTermsModal);
+    viewTermsSettingsBtn.addEventListener('click', showTermsModal);
+    termsCloseBtn.addEventListener('click', hideTermsModal);
+    termsCloseXBtn.addEventListener('click', hideTermsModal);
     editProfileBtn.addEventListener('click', openProfileEdit);
     saveProfileBtn.addEventListener('click', () => {
       const newName = profileNameInput.value.trim();
@@ -940,7 +1166,7 @@
     endPracticeTopBtn.addEventListener('click', endPracticeConfirm);
 
     homeBtn.addEventListener('click', () => {
-      showConfirmModal('End Practice', 'Are you sure you want to end your practice session and go back home?', () => {
+      showConfirmModal('End Practice', 'Are you sure you want to end your practice session and go back to home?', () => {
         isPracticing = false;
         endPracticeBtn.classList.add('hidden');
         endPracticeTopBtn.classList.add('hidden');
