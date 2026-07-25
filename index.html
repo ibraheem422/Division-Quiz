@@ -6,1337 +6,899 @@
   <title>Division Quiz</title>
   <style>
     :root {
-      color-scheme: light;
-      --bg-primary: #ffffff;
-      --bg-secondary: #f8fafc;
-      --text-primary: #0f172a;
-      --text-secondary: #334155;
-      --border-color: #cbd5e1;
-      --card-shadow: rgba(0, 0, 0, 0.15);
+      --bg-primary: #ffffff; --bg-secondary: #f8fafc;
+      --text-primary: #0f172a; --text-secondary: #334155;
+      --border-color: #cbd5e1; --card-shadow: rgba(0,0,0,0.15);
     }
-
     :root.dark-mode {
-      color-scheme: dark;
-      --bg-primary: #0f172a;
-      --bg-secondary: #1e293b;
-      --text-primary: #f1f5f9;
-      --text-secondary: #cbd5e1;
-      --border-color: #475569;
-      --card-shadow: rgba(0, 0, 0, 0.5);
+      --bg-primary: #0f172a; --bg-secondary: #1e293b;
+      --text-primary: #f1f5f9; --text-secondary: #cbd5e1;
+      --border-color: #475569; --card-shadow: rgba(0,0,0,0.5);
     }
-
     * { box-sizing: border-box; }
-
     body {
       font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #eef6ff, #dbeafe);
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      color: var(--text-primary);
-      transition: background 0.3s ease, color 0.3s ease;
+      margin: 0; min-height: 100vh;
+      display: flex; justify-content: center; align-items: center;
+      padding: 20px; color: var(--text-primary);
     }
-
-    :root.dark-mode body {
-      background: linear-gradient(135deg, #0f172a, #1e293b);
-    }
-
+    :root.dark-mode body { background: linear-gradient(135deg, #0f172a, #1e293b); }
     .card {
       background: var(--bg-primary);
       border-radius: 18px;
       box-shadow: 0 12px 30px var(--card-shadow);
       width: min(94vw, 520px);
-      padding: 24px;
-      text-align: center;
-      transition: background 0.3s ease;
+      padding: 24px; text-align: center;
     }
-
     h1, h2 { margin-top: 0; color: #1d4ed8; }
-
     .screen { display: block; }
-    .hidden { display: none; }
-
+    .hidden { display: none !important; }
     .input {
-      width: 100%;
-      padding: 12px;
+      width: 100%; padding: 12px;
       border: 2px solid var(--border-color);
-      border-radius: 10px;
-      font-size: 1rem;
+      border-radius: 10px; font-size: 1rem;
       margin: 8px 0 12px;
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-      transition: all 0.2s ease;
+      background: var(--bg-secondary); color: var(--text-primary);
     }
-
-    .form-group {
-      text-align: left;
-      margin-bottom: 8px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 6px;
-      color: var(--text-secondary);
-      font-weight: bold;
-    }
-
-    .toggle-row {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .toggle-btn {
-      background: #f8fafc;
-      border: 2px solid #cbd5e1;
-      color: #0f172a;
-    }
-
-    .toggle-btn.active {
-      background: #dbeafe;
-      border-color: #2563eb;
-      color: #1d4ed8;
-      font-weight: bold;
-    }
-
-    .dark-mode-toggle {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 12px 0;
-      justify-content: center;
-    }
-
-    .toggle-switch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 28px;
-    }
-
-    .toggle-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #cbd5e1;
-      transition: 0.4s;
-      border-radius: 28px;
-    }
-
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 22px;
-      width: 22px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: 0.4s;
-      border-radius: 50%;
-    }
-
-    input:checked + .slider {
-      background-color: #2563eb;
-    }
-
-    input:checked + .slider:before {
-      transform: translateX(22px);
-    }
-
-    .btn-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 16px;
-    }
-
-    button {
-      border: none;
-      border-radius: 10px;
-      padding: 12px 14px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: transform 0.15s ease, background 0.2s ease;
-    }
-
+    .form-group { text-align: left; margin-bottom: 8px; }
+    .form-group label { display: block; margin-bottom: 6px; color: var(--text-secondary); font-weight: bold; }
+    .toggle-row { display: flex; justify-content: center; gap: 10px; margin-bottom: 12px; }
+    .toggle-btn { background: #f8fafc; border: 2px solid #cbd5e1; color: #0f172a; padding: 10px 20px; border-radius: 10px; cursor: pointer; }
+    .toggle-btn.active { background: #dbeafe; border-color: #2563eb; color: #1d4ed8; font-weight: bold; }
+    .dark-mode-toggle { display: flex; align-items: center; gap: 8px; margin: 12px 0; justify-content: center; }
+    .toggle-switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; inset: 0; background: #cbd5e1; border-radius: 28px; transition: 0.4s; }
+    .slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.4s; }
+    input:checked + .slider { background: #2563eb; }
+    input:checked + .slider:before { transform: translateX(22px); }
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 16px; }
+    button { border: none; border-radius: 10px; padding: 12px 18px; font-size: 1rem; cursor: pointer; transition: transform 0.15s, background 0.2s; }
     button:hover { transform: translateY(-2px); }
-
     .primary-btn { background: #2563eb; color: white; }
     .primary-btn:hover { background: #1d4ed8; }
-
     .secondary-btn { background: #e2e8f0; color: #0f172a; }
     .secondary-btn:hover { background: #cbd5e1; }
-
-    .difficulty-btn {
-      min-width: 100px;
-      background: #f8fafc;
-      border: 2px solid #cbd5e1;
-      color: #0f172a;
-    }
-
-    .difficulty-btn.active {
-      background: #dbeafe;
-      border-color: #2563eb;
-      color: #1d4ed8;
-      font-weight: bold;
-    }
-
-    .welcome { margin: 10px 0 20px; color: #334155; }
-
-    .stats {
-      display: flex;
-      justify-content: space-between;
-      margin: 10px 0 16px;
-      font-weight: bold;
-      color: #334155;
-    }
-
-    #question {
-      font-size: 1.3rem;
-      margin: 12px 0 18px;
-      color: #0f172a;
-    }
-
-    .timer-display {
-      font-size: 1.2rem;
-      font-weight: bold;
-      margin-bottom: 12px;
-      padding: 8px 12px;
-      border-radius: 8px;
-      background: #f3f4f6;
-      color: #1d4ed8;
-    }
-
-    .timer-display.warning {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .timer-display.danger {
-      background: #fee2e2;
-      color: #dc2626;
-      animation: pulse 0.5s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
-    }
-
-    .quiz-difficulty {
-      font-size: 0.9rem;
-      color: #666;
-      margin-bottom: 8px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .high-score-box {
-      background: linear-gradient(135deg, #fbbf24, #f59e0b);
-      color: white;
-      padding: 12px;
-      border-radius: 8px;
-      margin: 12px 0;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .keyboard-hint {
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-      margin-top: 4px;
-    }
-
-    .profile-notes {
-      background: var(--bg-secondary);
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      margin: 12px 0;
-      text-align: left;
-      color: var(--text-secondary);
-      max-height: 80px;
-      overflow-y: auto;
-      font-size: 0.9rem;
-      font-style: italic;
-    }
-
-    .share-btn-group {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+    .danger-btn { background: #ef4444; color: white; }
+    .danger-btn:hover { background: #dc2626; }
+    .difficulty-btn { min-width: 100px; background: #f8fafc; border: 2px solid #cbd5e1; color: #0f172a; }
+    .difficulty-btn.active { background: #dbeafe; border-color: #2563eb; color: #1d4ed8; font-weight: bold; }
+    .welcome { margin: 10px 0 20px; color: var(--text-secondary); }
+    .stats { display: flex; justify-content: space-between; margin: 10px 0 16px; font-weight: bold; color: var(--text-secondary); }
+    #question { font-size: 1.4rem; margin: 12px 0 18px; color: var(--text-primary); font-weight: bold; }
+    .timer-bar-wrap { background: #e2e8f0; border-radius: 8px; height: 10px; margin-bottom: 6px; overflow: hidden; }
+    .timer-bar { height: 100%; background: #2563eb; border-radius: 8px; transition: width 1s linear, background 0.3s; }
+    .timer-display { font-size: 1rem; font-weight: bold; margin-bottom: 12px; color: #1d4ed8; }
+    .timer-display.warning { color: #92400e; }
+    .timer-display.danger  { color: #dc2626; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+    .quiz-difficulty { font-size: 0.85rem; color: #666; margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .high-score-box { background: linear-gradient(135deg,#fbbf24,#f59e0b); color: white; padding: 10px 14px; border-radius: 8px; margin: 12px 0; font-weight: bold; font-size: 0.95rem; }
+    .keyboard-hint { font-size: 0.72rem; color: var(--text-secondary); margin: 6px 0 0; }
+    .options {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
+      margin: 14px 0;
     }
-
     .option-btn {
-      background: #e2e8f0;
-      color: #0f172a;
+      background: #e2e8f0; color: #0f172a;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      padding: 22px 10px;
+      font-size: 1.3rem; font-weight: 700;
+      cursor: pointer; width: 100%;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
     }
+    .option-btn:hover:not([disabled]) { background: #bfdbfe; border-color: #2563eb; transform: translateY(-2px); }
+    .option-btn[disabled] { cursor: not-allowed; opacity: 0.7; }
+    .option-btn.correct-highlight { background: #bbf7d0 !important; border-color: #16a34a !important; color: #14532d; }
+    .option-btn.wrong-highlight   { background: #fecaca !important; border-color: #dc2626 !important; color: #7f1d1d; }
+    .feedback { margin-top: 14px; font-weight: bold; min-height: 22px; font-size: 1rem; }
+    .correct { color: #15803d; } .wrong { color: #dc2626; }
+    .status-message { min-height: 20px; margin-top: 8px; font-weight: 700; font-size: 0.9rem; }
+    .status-success { color: #15803d; } .status-error { color: #dc2626; }
 
-    .option-btn:hover { background: #cbd5e1; }
-
-    .feedback {
-      margin-top: 16px;
-      font-weight: bold;
-      min-height: 24px;
-    }
-
-    .status-message {
-      min-height: 24px;
-      margin-top: 10px;
-      font-weight: 700;
-    }
-    .status-success { color: #15803d; }
-    .status-error { color: #dc2626; }
-
+    /* Practice banner — always visible on quiz screen */
     .practice-banner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      background: #fffbeb;
-      border: 1px solid #f5e1a4;
-      padding: 8px 12px;
-      border-radius: 10px;
-      margin-bottom: 12px;
-      color: #92400e;
-      font-weight: 600;
+      display: flex; justify-content: space-between; align-items: center;
+      background: #fffbeb; border: 1px solid #f5e1a4;
+      padding: 10px 14px; border-radius: 10px; margin-bottom: 14px;
+      color: #92400e; font-weight: 600; gap: 8px;
     }
-    /* Confirmation modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-    }
-    .modal-box {
-      background: #0b1220;
-      color: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      width: min(92vw, 420px);
-      box-shadow: 0 10px 40px rgba(2,6,23,0.6);
-      text-align: center;
-      border: 3px solid #2b3a4b;
-    }
-    .modal-title { font-size: 1.25rem; color: #ffd54f; margin-bottom: 8px; }
-    .modal-message { color: #e6eef8; margin-bottom: 16px; }
-    .modal-actions { display:flex; gap:12px; justify-content:center; }
-    .modal-yes { background: #4ade80; color: #072b05; padding: 12px 20px; border-radius:8px; border:none; }
-    .modal-cancel { background: #ef4444; color: #2b0a09; padding: 12px 20px; border-radius:8px; border:none; }
-    .correct { color: #15803d; }
-    .wrong { color: #dc2626; }
+    .banner-btns { display: flex; gap: 8px; }
 
-    /* Terms & Conditions */
-    .terms-modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-    }
-    .terms-modal-box {
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      padding: 24px;
-      border-radius: 12px;
-      width: min(92vw, 500px);
-      max-height: 70vh;
-      overflow-y: auto;
-      box-shadow: 0 10px 40px var(--card-shadow);
-      border: 2px solid var(--border-color);
-    }
-    .terms-title {
-      font-size: 1.5rem;
-      color: #1d4ed8;
-      margin-bottom: 16px;
-      margin-top: 0;
-    }
-    .terms-content {
-      font-size: 0.95rem;
-      line-height: 1.6;
-      color: var(--text-secondary);
-      margin-bottom: 16px;
-    }
-    .terms-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-    .terms-close-btn {
-      background: #2563eb;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-    }
+    /* Modals */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 2000; }
+    .modal-box { background: #0b1220; color: #fff; padding: 24px; border-radius: 14px; width: min(92vw,420px); text-align: center; border: 3px solid #2b3a4b; }
+    .modal-title   { font-size: 1.2rem; color: #ffd54f; margin-bottom: 8px; }
+    .modal-message { color: #e6eef8; margin-bottom: 18px; }
+    .modal-actions { display: flex; gap: 12px; justify-content: center; }
+    .modal-yes    { background: #4ade80; color: #072b05; padding: 12px 22px; border-radius: 8px; border: none; cursor: pointer; font-weight: 700; }
+    .modal-cancel { background: #ef4444; color: #fff;    padding: 12px 22px; border-radius: 8px; border: none; cursor: pointer; font-weight: 700; }
+    .terms-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 2000; }
+    .terms-modal-box { background: var(--bg-primary); color: var(--text-primary); padding: 24px; border-radius: 14px; width: min(92vw,500px); max-height: 72vh; overflow-y: auto; border: 2px solid var(--border-color); position: relative; }
+    .terms-title { font-size: 1.4rem; color: #1d4ed8; margin: 0 0 14px; }
+    .terms-content { font-size: 0.92rem; line-height: 1.65; color: var(--text-secondary); margin-bottom: 16px; }
+    .terms-content h4 { color: var(--text-primary); margin: 14px 0 4px; }
+    .terms-actions { display: flex; justify-content: center; }
+    .terms-close-btn { background: #2563eb; color: white; padding: 10px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; }
+    .terms-close-x { position: absolute; top: 10px; right: 12px; background: none; border: none; font-size: 26px; color: var(--text-primary); cursor: pointer; line-height: 1; }
+    .terms-close-x:hover { opacity: 0.6; }
+    .terms-checkbox-container { display: flex; align-items: center; gap: 8px; margin: 12px 0; text-align: left; }
+    .terms-checkbox-container input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; flex-shrink: 0; }
+    .terms-checkbox-container label { margin: 0; font-size: 0.92rem; color: var(--text-secondary); cursor: pointer; }
+    .terms-link { color: #2563eb; text-decoration: underline; cursor: pointer; font-weight: 600; }
 
-    .terms-close-x {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: none;
-      border: none;
-      font-size: 28px;
-      color: var(--text-primary);
-      cursor: pointer;
-      padding: 0;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.2s;
-    }
-
-    .terms-close-x:hover {
-      transform: scale(1.2);
-    }
-
-    .terms-checkbox-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 12px 0;
-      text-align: left;
-    }
-
-    .terms-checkbox-container input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-    }
-
-    .terms-checkbox-container label {
-      margin: 0;
-      font-size: 0.95rem;
-      cursor: pointer;
-      color: var(--text-secondary);
-    }
-
-    .terms-link {
-      color: #2563eb;
-      text-decoration: underline;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .terms-link:hover {
-      color: #1d4ed8;
-    }
-
-    @media (max-width: 480px) {
-      .options { grid-template-columns: 1fr; }
-      .btn-row { flex-direction: column; }
-    }
+    /* Results card */
+    .results-card { grid-column: 1/-1; background: var(--bg-secondary); border-radius: 12px; padding: 16px; text-align: left; border: 1px solid var(--border-color); }
+    .results-card p { margin: 6px 0; font-size: 1rem; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div id="login-screen" class="screen">
-      <h1>Division Quiz</h1>
-      <div class="toggle-row">
-        <button id="show-login-btn" class="toggle-btn active">Login</button>
-        <button id="show-signup-btn" class="toggle-btn">Sign Up</button>
-      </div>
-      <p id="auth-message">Log in to continue your division practice.</p>
-      <div class="form-group hidden" id="name-group">
-        <label for="name">Full Name</label>
-        <input id="name" class="input" type="text" placeholder="Enter your full name" />
+<div class="card">
+
+  <!-- LOGIN -->
+  <div id="login-screen" class="screen">
+    <h1>Division quiz</h1>
+    <div class="toggle-row">
+      <button id="show-login-btn" class="toggle-btn active">Sign In</button>
+      <button id="show-signup-btn" class="toggle-btn">Sign Up</button>
+    </div>
+    <p id="auth-message">Log in to continue your division practice.</p>
+    <div class="form-group hidden" id="name-group">
+      <label>Full Name:</label>
+      <input id="name" class="input" type="text" placeholder="Enter Your Full Name Here" />
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input id="email" class="input" type="email" placeholder="Enter Your Email Here" />
+    </div>
+    <div class="form-group">
+      <label>Create Password</label>
+      <input id="password" class="input" type="password" placeholder="Enter Your Password" />
+    </div>
+    <div class="terms-checkbox-container hidden" id="terms-container">
+      <input type="checkbox" id="terms-checkbox" />
+      <label for="terms-checkbox">I agree to the <span class="terms-link" id="view-terms-link">Terms And Conditions</span></label>
+    </div>
+    <button id="auth-btn" class="primary-btn" style="width:100%; margin-top:8px;">Sign In</button>
+  </div>
+
+  <!-- HOME -->
+  <div id="home-screen" class="screen hidden">
+    <h2>Welcome</h2>
+    <p id="welcome-message" class="welcome">Choose your difficulty and begin.</p>
+    <div id="site-message" class="status-message hidden"></div>
+    <div class="btn-row">
+      <button class="difficulty-btn active" data-difficulty="easy">Easy</button>
+      <button class="difficulty-btn" data-difficulty="medium">Medium</button>
+      <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+    </div>
+    <div id="high-score-display" class="high-score-box hidden">
+       Best: <span id="best-score-value"></span>
+    </div>
+    <div class="btn-row" style="margin-top:14px;">
+      <button id="start-btn" class="primary-btn">▶ Start Practice</button>
+      <button id="resume-btn" class="primary-btn hidden">⟳ Resume</button>
+    </div>
+    <div class="btn-row" style="margin-top:12px;">
+      <button id="leaderboard-btn" class="secondary-btn">Leaderboard</button>
+      <button id="settings-btn" class="secondary-btn">⚙ Settings</button>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="settings-screen" class="screen hidden">
+    <h2>⚙ Settings</h2>
+    <div id="site-message-settings" class="status-message hidden"></div>
+    <div style="text-align:left; margin-bottom:12px;">
+      <p style="margin:4px 0;"><strong>Name:</strong> <span id="profile-name">-</span></p>
+      <p style="margin:4px 0;"><strong>Email:</strong> <span id="profile-email">-</span></p>
+    </div>
+    <div class="dark-mode-toggle">
+      <span style="font-weight:600; color:var(--text-secondary);">Dark Mode</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="dark-mode-checkbox" />
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div id="profile-edit-area" class="hidden" style="text-align:left; margin-top:10px;">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input id="profile-name-input" class="input" type="text" />
       </div>
       <div class="form-group">
-        <label for="email">Email</label>
-        <input id="email" class="input" type="email" placeholder="Enter your email" />
+        <label>Email</label>
+        <input id="profile-email-input" class="input" type="email" />
       </div>
       <div class="form-group">
-        <label for="password">Password</label>
-        <input id="password" class="input" type="password" placeholder="Enter your password" />
+        <label>New Password <span style="font-weight:400; font-size:0.85rem;">(leave blank to keep)</span></label>
+        <input id="profile-password-input" class="input" type="password" />
       </div>
-      <div class="terms-checkbox-container hidden" id="terms-container">
-        <input type="checkbox" id="terms-checkbox" />
-        <label for="terms-checkbox">
-          I agree to the <span class="terms-link" id="view-terms-link">Terms and Conditions</span>
-        </label>
-      </div>
-      <button id="auth-btn" class="primary-btn">Login</button>
-    </div>
-
-    <div id="home-screen" class="screen hidden">
-      <h2>Welcome</h2>
-      <p id="welcome-message" class="welcome">Choose your difficulty and begin.</p>
-      <div id="site-message" class="status-message hidden"></div>
-      <div class="btn-row">
-        <button class="difficulty-btn active" data-difficulty="easy">Easy</button>
-        <button class="difficulty-btn" data-difficulty="medium">Medium</button>
-        <button class="difficulty-btn" data-difficulty="hard">Hard</button>
-      </div>
-      <div id="high-score-display" class="high-score-box hidden">
-        🏆 Best Score: <span id="best-score-value">0</span>
+      <div class="form-group">
+        <label>Personal Notes</label>
+        <textarea id="profile-notes-input" class="input" placeholder="Goals, reminders..." style="resize:vertical; min-height:70px;"></textarea>
       </div>
       <div class="btn-row">
-        <button id="start-btn" class="primary-btn">Start Practice</button>
-        <button id="resume-btn" class="primary-btn hidden">Resume Practice</button>
-      </div>
-      <div class="btn-row" style="margin-top:12px;">
-        <button id="leaderboard-btn" class="secondary-btn">Leaderboard</button>
-        <button id="settings-btn" class="secondary-btn">Settings</button>
+        <button id="save-profile-btn" class="primary-btn">Save</button>
+        <button id="cancel-profile-btn" class="secondary-btn">Cancel</button>
       </div>
     </div>
-
-    <div id="settings-screen" class="screen hidden">
-      <h2>Settings</h2>
-      <div id="site-message-settings" class="status-message hidden"></div>
-      
-      <div id="profile-area" class="welcome" style="text-align:left;">
-        <p><strong>Name:</strong> <span id="profile-name">-</span></p>
-        <p><strong>Email:</strong> <span id="profile-email">-</span></p>
-      </div>
-
-      <div class="dark-mode-toggle">
-        <label for="dark-mode-checkbox">Dark Mode</label>
-        <label class="toggle-switch">
-          <input type="checkbox" id="dark-mode-checkbox" />
-          <span class="slider"></span>
-        </label>
-      </div>
-
-      <div id="profile-edit-area" class="hidden" style="text-align:left;">
-        <div class="form-group">
-          <label for="profile-name-input">Full Name</label>
-          <input id="profile-name-input" class="input" type="text" />
-        </div>
-        <div class="form-group">
-          <label for="profile-email-input">Email</label>
-          <input id="profile-email-input" class="input" type="email" />
-        </div>
-        <div class="form-group">
-          <label for="profile-password-input">Password</label>
-          <input id="profile-password-input" class="input" type="password" placeholder="Enter new password" />
-        </div>
-        <div class="form-group">
-          <label for="profile-notes-input">Personal Notes</label>
-          <textarea id="profile-notes-input" class="input" placeholder="Add personal notes or goals" style="resize: vertical; min-height: 80px;"></textarea>
-        </div>
-        <div class="btn-row">
-          <button id="save-profile-btn" class="primary-btn">Save</button>
-          <button id="cancel-profile-btn" class="secondary-btn">Cancel</button>
-        </div>
-      </div>
-
-      <div id="edit-profile-btn-container" class="btn-row">
-        <button id="edit-profile-btn" class="secondary-btn">Edit Profile</button>
-      </div>
-
-      <div class="btn-row" style="margin-top:12px;">
-        <button id="export-btn" class="secondary-btn">Export Data</button>
-        <label class="secondary-btn" style="cursor:pointer;">
-          Import Data
-          <input id="import-file" type="file" accept="application/json" style="display:none" />
-        </label>
-        <button id="view-terms-settings-btn" class="secondary-btn">View Terms</button>
-      </div>
-
-      <div class="btn-row" style="margin-top:20px;">
-        <button id="back-home-btn" class="primary-btn">Back to Home</button>
-        <button id="logout-btn" class="secondary-btn" style="background: #ef4444; color: white;">Logout</button>
-      </div>
+    <div class="btn-row" style="margin-top:10px;">
+      <button id="edit-profile-btn" class="secondary-btn">✏ Edit Profile</button>
     </div>
-
-    <div id="quiz-screen" class="screen hidden">
-      <div id="practice-banner" class="practice-banner hidden" role="status">
-        <div>Practice in progress</div>
-        <div style="display:flex; gap:8px;">
-          <button id="end-practice-top" class="secondary-btn">End Practice</button>
-        </div>
-      </div>
-      <h2>Division Quiz</h2>
-      <div class="quiz-difficulty" id="difficulty-indicator"></div>
-      <div class="timer-display" id="timer-display">Time: 30s</div>
-      <div class="stats">
-        <span id="question-counter">Question 1/10</span>
-        <span id="score">Score: 0</span>
-      </div>
-      <div id="question">Loading...</div>
-      <div class="options" id="options"></div>
-      <div id="feedback" class="feedback"></div>
-      <div class="btn-row">
-        <button id="next-btn" class="primary-btn hidden">Next Question</button>
-        <button id="share-score-btn" class="secondary-btn hidden">Share Score</button>
-        <button id="end-practice-btn" class="secondary-btn hidden">End Practice</button>
-        <button id="home-btn" class="secondary-btn hidden">Back to Home</button>
-      </div>
+    <div class="btn-row" style="margin-top:12px;">
+      <button id="export-btn" class="secondary-btn">⬇ Export</button>
+      <label class="secondary-btn" style="cursor:pointer;">⬆ Import<input id="import-file" type="file" accept="application/json" style="display:none" /></label>
+      <button id="view-terms-settings-btn" class="secondary-btn">📄 Terms</button>
+    </div>
+    <div class="btn-row" style="margin-top:20px;">
+      <button id="back-home-btn" class="primary-btn">← Back</button>
+      <button id="logout-btn" class="danger-btn">Logout</button>
     </div>
   </div>
 
-  <!-- Leaderboard modal -->
-  <div id="leaderboard-modal" class="hidden" aria-hidden="true">
-    <div class="modal-overlay">
-      <div class="modal-box" role="dialog" aria-modal="true">
-        <div class="modal-title">Leaderboard</div>
-        <div style="max-height:50vh; overflow:auto; margin:12px 0; background:#071429; padding:8px; border-radius:8px;">
-          <table id="leaderboard-table" style="width:100%; border-collapse:collapse; color:#e6eef8;">
-            <thead>
-              <tr>
-                <th style="text-align:left; padding:6px;">Name</th>
-                <th style="text-align:left; padding:6px;">Score</th>
-                <th style="text-align:left; padding:6px;">Difficulty</th>
-                <th style="text-align:left; padding:6px;">Date</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-        <div class="modal-actions">
-          <button id="close-leaderboard" class="modal-yes">Close</button>
-        </div>
+  <!-- QUIZ -->
+  <div id="quiz-screen" class="screen hidden">
+    <!-- Always-visible banner during practice -->
+    <div id="practice-banner" class="practice-banner">
+      <span> Practice in progress</span>
+      <div class="banner-btns">
+        <button id="save-exit-btn" class="secondary-btn"> Save & Exit</button>
+        <button id="end-practice-top" class="danger-btn"> End</button>
       </div>
+    </div>
+
+    <div class="quiz-difficulty" id="difficulty-indicator"></div>
+    <div class="timer-bar-wrap"><div class="timer-bar" id="timer-bar"></div></div>
+    <div class="timer-display" id="timer-display">Time: 30s</div>
+    <div class="stats">
+      <span id="question-counter">Question 1/10</span>
+      <span id="score">Score: 0</span>
+    </div>
+    <div id="question">Loading...</div>
+    <div class="options" id="options"></div>
+    <p class="keyboard-hint"> Press 1–4 to answer</p>
+    <div id="feedback" class="feedback"></div>
+    <div class="btn-row" style="margin-top:14px;">
+      <button id="next-btn" class="primary-btn hidden">Next →</button>
+      <button id="share-score-btn" class="secondary-btn hidden"> Share Score</button>
+      <button id="home-btn" class="secondary-btn hidden"> Home</button>
     </div>
   </div>
 
-  <!-- Confirmation modal -->
-  <div id="confirm-modal" class="hidden" aria-hidden="true">
-    <div class="modal-overlay">
-      <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <div id="modal-title" class="modal-title">End Practice</div>
-        <div id="modal-message" class="modal-message">Are you sure you want to end your practice session?</div>
-        <div class="modal-actions">
-          <button id="confirm-yes" class="modal-yes">Yes</button>
-          <button id="confirm-cancel" class="modal-cancel">Cancel</button>
-        </div>
+</div><!-- .card -->
+
+<!-- LEADERBOARD -->
+<div id="leaderboard-modal" class="hidden">
+  <div class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-title"> Leaderboard (Top 10)</div>
+      <div style="max-height:50vh; overflow:auto; margin:12px 0; background:#071429; padding:8px; border-radius:8px;">
+        <table id="leaderboard-table" style="width:100%; border-collapse:collapse; color:#e6eef8; font-size:0.9rem;">
+          <thead><tr>
+            <th style="text-align:left; padding:6px;">Name</th>
+            <th style="text-align:left; padding:6px;">Score</th>
+            <th style="text-align:left; padding:6px;">Difficulty</th>
+            <th style="text-align:left; padding:6px;">Date</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="modal-actions"><button id="close-leaderboard" class="modal-yes">Close</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM -->
+<div id="confirm-modal" class="hidden">
+  <div class="modal-overlay">
+    <div class="modal-box">
+      <div id="modal-title" class="modal-title">Confirm</div>
+      <div id="modal-message" class="modal-message"></div>
+      <div class="modal-actions">
+        <button id="confirm-yes" class="modal-yes">Yes</button>
+        <button id="confirm-cancel" class="modal-cancel">No</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Terms and Conditions Modal -->
-  <div id="terms-modal" class="hidden" aria-hidden="true">
-    <div class="terms-modal-overlay">
-      <div class="terms-modal-box" role="dialog" aria-modal="true" style="position: relative;">
-        <button id="terms-close-x" class="terms-close-x" aria-label="Close terms">&times;</button>
-        <h3 class="terms-title">Terms and Conditions</h3>
-        <div class="terms-content">
-          <h4>1. Acceptance of Terms</h4>
-          <p>By creating an account and using this Division Practice application, you agree to comply with these Terms and Conditions. If you do not agree, please do not use the service.</p>
-
-          <h4>2. User Accounts</h4>
-          <p>You are responsible for maintaining the confidentiality of your login credentials and account information. You agree to use the application only for lawful purposes and in a way that does not infringe the rights of others.</p>
-
-          <h4>3. Intellectual Property</h4>
-          <p>All content, features, and functionality of this application are provided as-is. You may use this application for personal, educational purposes only.</p>
-
-          <h4>4. User Data and Privacy</h4>
-          <p>Your account information and quiz scores are stored locally on your device. No personal data is collected, stored, or transmitted to external servers. You have full control over your data through export and import features.</p>
-
-          <h4>5. Educational Use</h4>
-          <p>This application is designed for educational purposes to help practice division skills. Users assume all responsibility for how they use this tool and the results obtained.</p>
-
-          <h4>6. Limitation of Liability</h4>
-          <p>This application is provided "as-is" without warranties of any kind. The developer is not liable for any damages arising from the use or inability to use the application.</p>
-
-          <h4>7. Modifications to Terms</h4>
-          <p>We reserve the right to modify these Terms and Conditions at any time. Your continued use of the application constitutes acceptance of any changes.</p>
-
-          <h4>8. Termination</h4>
-          <p>You may terminate your account at any time by using the logout feature. Accounts that violate these terms may be subject to restrictions.</p>
-        </div>
-        <div class="terms-actions">
-          <button id="terms-close-btn" class="terms-close-btn">I Agree</button>
-        </div>
+<!-- TERMS -->
+<div id="terms-modal" class="hidden">
+  <div class="terms-modal-overlay">
+    <div class="terms-modal-box">
+      <button id="terms-close-x" class="terms-close-x">&times;</button>
+      <h3 class="terms-title">Terms and Conditions</h3>
+      <div class="terms-content">
+        <h4>1. Acceptance of Terms</h4>
+        <p>By creating an account and using this Division Practice application, you agree to comply with these Terms and Conditions.</p>
+        <h4>2. User Accounts</h4>
+        <p>You are responsible for maintaining the confidentiality of your login credentials and agree to use the app for lawful, educational purposes only.</p>
+        <h4>3. Intellectual Property</h4>
+        <p>All content and functionality are provided as-is for personal, educational use only.</p>
+        <h4>4. User Data and Privacy</h4>
+        <p>Your account information and quiz scores are stored locally on your device only. No personal data is transmitted to external servers.</p>
+        <h4>5. Educational Use</h4>
+        <p>This application is designed to help practice division skills. Users assume responsibility for how they use this tool.</p>
+        <h4>6. Limitation of Liability</h4>
+        <p>This application is provided "as-is" without warranties. The developer is not liable for any damages arising from its use.</p>
+        <h4>7. Modifications to Terms</h4>
+        <p>We reserve the right to modify these Terms at any time. Continued use constitutes acceptance of changes.</p>
+        <h4>8. Termination</h4>
+        <p>You may stop using the application at any time. Accounts that violate these terms may be restricted.</p>
+      </div>
+      <div class="terms-actions">
+        <button id="terms-close-btn" class="terms-close-btn">I Agree</button>
       </div>
     </div>
   </div>
+</div>
 
-  <script>
-    console.log('division-quiz script starting');
-    window.addEventListener('error', (e) => {
-      console.error('Runtime error', e.error || e.message);
-      try { alert('Script error: ' + (e.message || e.error && e.error.message)); } catch (_) {}
+<script>
+// ── Refs ──────────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+
+const loginScreen    = $('login-screen');
+const homeScreen     = $('home-screen');
+const quizScreen     = $('quiz-screen');
+const settingsScreen = $('settings-screen');
+
+const nameInput            = $('name');
+const nameGroup            = $('name-group');
+const emailInput           = $('email');
+const passwordInput        = $('password');
+const authBtn              = $('auth-btn');
+const authMessage          = $('auth-message');
+const showLoginBtn         = $('show-login-btn');
+const showSignupBtn        = $('show-signup-btn');
+const termsCheckbox        = $('terms-checkbox');
+const termsContainer       = $('terms-container');
+const viewTermsLink        = $('view-terms-link');
+const viewTermsSettingsBtn = $('view-terms-settings-btn');
+const termsModal           = $('terms-modal');
+const termsCloseBtn        = $('terms-close-btn');
+const termsCloseXBtn       = $('terms-close-x');
+
+const welcomeMessage       = $('welcome-message');
+const profileNameText      = $('profile-name');
+const profileEmailText     = $('profile-email');
+const editProfileBtn       = $('edit-profile-btn');
+const profileEditArea      = $('profile-edit-area');
+const profileNameInput     = $('profile-name-input');
+const profileEmailInput    = $('profile-email-input');
+const profilePasswordInput = $('profile-password-input');
+const profileNotesInput    = $('profile-notes-input');
+const saveProfileBtn       = $('save-profile-btn');
+const cancelProfileBtn     = $('cancel-profile-btn');
+
+const startBtn          = $('start-btn');
+const resumeBtn         = $('resume-btn');
+const highScoreDisplay  = $('high-score-display');
+const bestScoreValue    = $('best-score-value');
+const settingsBtn       = $('settings-btn');
+const backHomeBtn       = $('back-home-btn');
+const logoutBtn         = $('logout-btn');
+const darkModeCheckbox  = $('dark-mode-checkbox');
+const leaderboardBtn    = $('leaderboard-btn');
+const exportBtn         = $('export-btn');
+const importFileInput   = $('import-file');
+const siteMessageEl     = $('site-message');
+const siteMessageSetEl  = $('site-message-settings');
+
+const questionEl         = $('question');
+const optionsEl          = $('options');
+const feedbackEl         = $('feedback');
+const questionCounterEl  = $('question-counter');
+const scoreEl            = $('score');
+const nextBtn            = $('next-btn');
+const shareScoreBtn      = $('share-score-btn');
+const endPracticeTopBtn  = $('end-practice-top');
+const saveExitBtn        = $('save-exit-btn');
+const practiceBanner     = $('practice-banner');
+const homeBtn            = $('home-btn');
+const timerDisplay       = $('timer-display');
+const timerBar           = $('timer-bar');
+const difficultyIndicator= $('difficulty-indicator');
+const difficultyButtons  = document.querySelectorAll('.difficulty-btn');
+
+const confirmModal   = $('confirm-modal');
+const confirmYes     = $('confirm-yes');
+const confirmCancel  = $('confirm-cancel');
+const modalTitleEl   = $('modal-title');
+const modalMessageEl = $('modal-message');
+
+const leaderboardModal     = $('leaderboard-modal');
+const leaderboardTableBody = document.querySelector('#leaderboard-table tbody');
+const closeLeaderboardBtn  = $('close-leaderboard');
+
+// ── State ─────────────────────────────────────────────────────
+let playerName        = '';
+let selectedDifficulty= 'easy';
+let authMode          = 'login';
+let currentQuestion   = 0;
+let score             = 0;
+let currentAnswer     = 0;
+let totalQuestions    = 10;
+let questions         = [];
+let account           = null;
+let isPracticing      = false;
+let quizStartTime     = null;
+let timeRemaining     = 31;
+let timerInterval     = null;
+let confirmCallback   = null;
+
+const DIFF = {
+  easy:   { label:'Easy',   maxDivisor:5,  maxQuotient:10, totalQuestions:10 },
+  medium: { label:'Medium', maxDivisor:8,  maxQuotient:15, totalQuestions:12 },
+  hard:   { label:'Hard',   maxDivisor:12, maxQuotient:20, totalQuestions:15 }
+};
+
+// ── Utilities ─────────────────────────────────────────────────
+function showScreen(s) {
+  [loginScreen, homeScreen, quizScreen, settingsScreen].forEach(el => el.classList.add('hidden'));
+  s.classList.remove('hidden');
+}
+function randInt(min, max) { return Math.floor(Math.random()*(max-min+1))+min; }
+function showMsg(el, msg, type='success') {
+  el.textContent = msg;
+  el.className = `status-message status-${type}`;
+  el.classList.remove('hidden');
+  setTimeout(() => el.classList.add('hidden'), 4000);
+}
+
+// ── Confirm modal ─────────────────────────────────────────────
+function confirm_(title, msg, cb) {
+  modalTitleEl.textContent   = title;
+  modalMessageEl.textContent = msg;
+  confirmCallback = cb;
+  confirmModal.classList.remove('hidden');
+  confirmYes.focus();
+}
+confirmYes.addEventListener('click', () => {
+  if (typeof confirmCallback === 'function') confirmCallback();
+  confirmModal.classList.add('hidden');
+  confirmCallback = null;
+});
+confirmCancel.addEventListener('click', () => {
+  confirmModal.classList.add('hidden');
+  confirmCallback = null;
+});
+
+// ── Terms ─────────────────────────────────────────────────────
+viewTermsLink.addEventListener('click',        () => termsModal.classList.remove('hidden'));
+viewTermsSettingsBtn.addEventListener('click', () => termsModal.classList.remove('hidden'));
+termsCloseBtn.addEventListener('click',        () => termsModal.classList.add('hidden'));
+termsCloseXBtn.addEventListener('click',       () => termsModal.classList.add('hidden'));
+
+// ── Dark mode ─────────────────────────────────────────────────
+darkModeCheckbox.addEventListener('change', () => {
+  const on = document.documentElement.classList.toggle('dark-mode');
+  localStorage.setItem('darkMode', on);
+  darkModeCheckbox.checked = on;
+});
+(function initDark() {
+  if (localStorage.getItem('darkMode') === 'true') {
+    document.documentElement.classList.add('dark-mode');
+    darkModeCheckbox.checked = true;
+  }
+})();
+
+// ── Auth mode ─────────────────────────────────────────────────
+function setAuthMode(mode) {
+  authMode = mode;
+  showLoginBtn.classList.toggle('active', mode === 'login');
+  showSignupBtn.classList.toggle('active', mode === 'signup');
+  authBtn.textContent = mode === 'login' ? 'Sign In' : 'Sign Up';
+  authMessage.textContent = mode === 'login'
+    ? 'Log in to continue your division practice.'
+    : 'Create an account with your name, email, and password.';
+  nameGroup.classList.toggle('hidden', mode !== 'signup');
+  termsContainer.classList.toggle('hidden', mode !== 'signup');
+  termsCheckbox.checked = false;
+}
+showLoginBtn.addEventListener('click',  () => setAuthMode('login'));
+showSignupBtn.addEventListener('click', () => setAuthMode('signup'));
+
+// ── Account helpers ───────────────────────────────────────────
+function saveAccount() {
+  localStorage.setItem('divisionQuizAccount', JSON.stringify(account));
+}
+function updateProfileDisplay() {
+  profileNameText.textContent  = account.fullName;
+  profileEmailText.textContent = account.email;
+}
+function goHome() {
+  playerName = account.fullName;
+  welcomeMessage.textContent = `${playerName}, choose a difficulty and start practicing.`;
+  updateProfileDisplay();
+  updateDifficultyButtons();
+  refreshHome();
+  showScreen(homeScreen);
+}
+
+// ── Auth ──────────────────────────────────────────────────────
+authBtn.addEventListener('click', () => {
+  const email    = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+  const fullName = nameInput.value.trim();
+
+  if (!email || !password || (authMode === 'signup' && !fullName)) {
+    authMessage.textContent = authMode === 'signup'
+      ? 'Please enter your name, email, and password.'
+      : 'Please enter both email and password.';
+    return;
+  }
+  if (authMode === 'signup' && !termsCheckbox.checked) {
+    authMessage.textContent = 'You must agree to the Terms and Conditions to sign up.';
+    return;
+  }
+
+  if (authMode === 'signup') {
+    try {
+      const ex = JSON.parse(localStorage.getItem('divisionQuizAccount') || 'null');
+      if (ex && ex.email === email) { authMessage.textContent = 'Email already registered. Please log in.'; return; }
+    } catch(e) {}
+    account = { fullName, email, password, notes: '' };
+    saveAccount();
+  } else {
+    let stored = null;
+    try { stored = JSON.parse(localStorage.getItem('divisionQuizAccount') || 'null'); } catch(e) {}
+    if (!stored)                                           { authMessage.textContent = 'No account found. Please sign up first.'; return; }
+    if (stored.email !== email || stored.password !== password) { authMessage.textContent = 'Wrong email or password.'; return; }
+    account = stored;
+  }
+  goHome();
+});
+
+// ── Profile ───────────────────────────────────────────────────
+editProfileBtn.addEventListener('click', () => {
+  profileNameInput.value     = account.fullName;
+  profileEmailInput.value    = account.email;
+  profilePasswordInput.value = '';
+  profileNotesInput.value    = account.notes || '';
+  profileEditArea.classList.remove('hidden');
+});
+cancelProfileBtn.addEventListener('click', () => profileEditArea.classList.add('hidden'));
+saveProfileBtn.addEventListener('click', () => {
+  const n = profileNameInput.value.trim(), e = profileEmailInput.value.trim();
+  if (!n || !e) { showMsg(siteMessageSetEl, 'Name and email are required.', 'error'); return; }
+  account.fullName = n; account.email = e;
+  const p = profilePasswordInput.value.trim();
+  if (p) account.password = p;
+  account.notes = profileNotesInput.value.trim();
+  saveAccount();
+  playerName = account.fullName;
+  welcomeMessage.textContent = `${playerName}, choose a difficulty and start practicing.`;
+  updateProfileDisplay();
+  profileEditArea.classList.add('hidden');
+  showMsg(siteMessageSetEl, 'Profile saved!');
+});
+
+// ── Difficulty ────────────────────────────────────────────────
+function updateDifficultyButtons() {
+  difficultyButtons.forEach(b => b.classList.toggle('active', b.dataset.difficulty === selectedDifficulty));
+}
+difficultyButtons.forEach(btn => btn.addEventListener('click', () => {
+  selectedDifficulty = btn.dataset.difficulty;
+  updateDifficultyButtons();
+  updateHighScore();
+}));
+
+// ── Leaderboard ───────────────────────────────────────────────
+function getLB() { try { return JSON.parse(localStorage.getItem('divisionQuizLeaderboard')||'[]'); } catch(e) { return []; } }
+function saveLB(l) { localStorage.setItem('divisionQuizLeaderboard', JSON.stringify(l)); }
+function addToLB(name, s, diff) {
+  const l = getLB();
+  l.push({ name: name||'Player', score: s, totalQuestions, difficulty: diff, date: new Date().toISOString() });
+  l.sort((a,b) => b.score - a.score || new Date(b.date)-new Date(a.date));
+  saveLB(l);
+}
+function renderLB() {
+  const top = getLB().slice(0,10);
+  leaderboardTableBody.innerHTML = ''; 
+  if (!top.length) { leaderboardTableBody.innerHTML='<tr><td colspan="4" style="padding:8px;">No results yet.</td></tr>'; return; }
+  top.forEach((e,i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td style="padding:6px;">#${i+1} ${e.name}</td><td style="padding:6px;">${e.score}/${e.totalQuestions||10}</td><td style="padding:6px;"><strong>${e.difficulty}</strong></td><td style="padding:6px;">${new Date(e.date).toLocaleDateString()}</td>`;
+    leaderboardTableBody.appendChild(tr);
+  });
+}
+leaderboardBtn.addEventListener('click', () => { renderLB(); leaderboardModal.classList.remove('hidden'); });
+closeLeaderboardBtn.addEventListener('click', () => leaderboardModal.classList.add('hidden'));
+
+// ── High score & session ──────────────────────────────────────
+function updateHighScore() {
+  const best = getLB().filter(e => e.difficulty === selectedDifficulty).sort((a,b)=>b.score-a.score)[0];
+  if (best) {
+    highScoreDisplay.classList.remove('hidden');
+    bestScoreValue.textContent = `${best.score}/${best.totalQuestions||10} (${best.difficulty})`;
+  } else {
+    highScoreDisplay.classList.add('hidden');
+  }
+}
+function saveSession() {
+  localStorage.setItem('divisionQuizSession', JSON.stringify({
+    questions, currentQuestion, score, selectedDifficulty, quizStartTime, totalQuestions
+  }));
+}
+function clearSession() { localStorage.removeItem('divisionQuizSession'); }
+function checkResume() {
+  try {
+    const s = JSON.parse(localStorage.getItem('divisionQuizSession')||'null');
+    if (s && typeof s.currentQuestion === 'number' && s.currentQuestion < s.totalQuestions && s.questions && s.questions.length) {
+      resumeBtn.classList.remove('hidden');
+      return s;
+    }
+  } catch(e) {}
+  resumeBtn.classList.add('hidden');
+  return null;
+}
+function refreshHome() { updateHighScore(); checkResume(); }
+
+// ── Quiz core ─────────────────────────────────────────────────
+function genQ() {
+  const c = DIFF[selectedDifficulty];
+  const div = randInt(2, c.maxDivisor);
+  const quo = randInt(2, Math.min(c.maxQuotient, Math.floor(120/div)));
+  return { dividend: div*quo, divisor: div, answer: quo };
+}
+
+function showQuestion() {
+  if (currentQuestion >= totalQuestions) { finishQuiz(); return; }
+
+  const q = questions[currentQuestion];
+  currentAnswer = q.answer;
+  questionEl.textContent = `${q.dividend} ÷ ${q.divisor} = ?`;
+  questionCounterEl.textContent = `Question ${currentQuestion+1}/${totalQuestions}`;
+  scoreEl.textContent = `Score: ${score}`;
+  feedbackEl.textContent = '';
+  feedbackEl.className = 'feedback';
+  nextBtn.classList.add('hidden');
+  homeBtn.classList.add('hidden');
+  shareScoreBtn.classList.add('hidden');
+
+  // Timer
+  clearInterval(timerInterval);
+  timeRemaining = 30;
+  updateTimerUI();
+  timerInterval = setInterval(() => {
+    timeRemaining--;
+    updateTimerUI();
+    if (timeRemaining <= 0) { clearInterval(timerInterval); checkAnswer(-1); }
+  }, 1000);
+
+  // Options
+  const set = new Set([q.answer]);
+  let tries = 0;
+  while (set.size < 4 && tries < 60) { const d = q.answer + randInt(-6,6); if (d>0 && d!==q.answer) set.add(d); tries++; }
+  const opts = Array.from(set).sort(()=>Math.random()-0.5);
+
+  optionsEl.innerHTML = '';
+  opts.forEach((val, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = val;
+    btn.dataset.key = idx+1;
+    btn.addEventListener('click', () => checkAnswer(val));
+    optionsEl.appendChild(btn);
+  });
+}
+
+function updateTimerUI() {
+  timerDisplay.textContent = `⏱ ${timeRemaining}s`;
+  timerDisplay.className = 'timer-display' + (timeRemaining<=5?' danger':timeRemaining<=10?' warning':'');
+  timerBar.style.width = `${(timeRemaining/30)*100}%`;
+  timerBar.style.background = timeRemaining<=5?'#ef4444':timeRemaining<=10?'#f59e0b':'#2563eb';
+}
+
+function checkAnswer(selected) {
+  clearInterval(timerInterval);
+  document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+
+  if (selected === currentAnswer) {
+    score++;
+    feedbackEl.textContent = 'Correct! ✓';
+    feedbackEl.className = 'feedback correct';
+    document.querySelectorAll('.option-btn').forEach(b => { if (Number(b.textContent)===currentAnswer) b.classList.add('correct-highlight'); });
+  } else if (selected === -1) {
+    feedbackEl.textContent = `⏱ Time's up! Answer: ${currentAnswer}`;
+    feedbackEl.className = 'feedback wrong';
+    document.querySelectorAll('.option-btn').forEach(b => { if (Number(b.textContent)===currentAnswer) b.classList.add('correct-highlight'); });
+  } else {
+    feedbackEl.textContent = `Not quite — answer is ${currentAnswer}`;
+    feedbackEl.className = 'feedback wrong';
+    document.querySelectorAll('.option-btn').forEach(b => {
+      if (Number(b.textContent)===selected)       b.classList.add('wrong-highlight');
+      if (Number(b.textContent)===currentAnswer)  b.classList.add('correct-highlight');
     });
-    window.addEventListener('unhandledrejection', (e) => {
-      console.error('Unhandled rejection', e.reason);
-      try { alert('Unhandled promise rejection: ' + (e.reason && e.reason.message ? e.reason.message : e.reason)); } catch (_) {}
-    });
-    const loginScreen = document.getElementById('login-screen');
-    const homeScreen = document.getElementById('home-screen');
-    const quizScreen = document.getElementById('quiz-screen');
-    const settingsScreen = document.getElementById('settings-screen');
-
-    const nameInput = document.getElementById('name');
-    const nameGroup = document.getElementById('name-group');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const authBtn = document.getElementById('auth-btn');
-    const authMessage = document.getElementById('auth-message');
-    const showLoginBtn = document.getElementById('show-login-btn');
-    const showSignupBtn = document.getElementById('show-signup-btn');
-    const welcomeMessage = document.getElementById('welcome-message');
-    const profileNameText = document.getElementById('profile-name');
-    const profileEmailText = document.getElementById('profile-email');
-    const editProfileBtn = document.getElementById('edit-profile-btn');
-    const profileEditArea = document.getElementById('profile-edit-area');
-    const profileNameInput = document.getElementById('profile-name-input');
-    const profileEmailInput = document.getElementById('profile-email-input');
-    const profilePasswordInput = document.getElementById('profile-password-input');
-    const saveProfileBtn = document.getElementById('save-profile-btn');
-    const cancelProfileBtn = document.getElementById('cancel-profile-btn');
-    const startBtn = document.getElementById('start-btn');
-    const resumeBtn = document.getElementById('resume-btn');
-    const highScoreDisplay = document.getElementById('high-score-display');
-    const bestScoreValue = document.getElementById('best-score-value');
-    const shareScoreBtn = document.getElementById('share-score-btn');
-    const difficultyButtons = document.querySelectorAll('.difficulty-btn');
-    const profileNotesInput = document.getElementById('profile-notes-input');
-    const termsCheckbox = document.getElementById('terms-checkbox');
-    const termsContainer = document.getElementById('terms-container');
-    const viewTermsLink = document.getElementById('view-terms-link');
-    const viewTermsSettingsBtn = document.getElementById('view-terms-settings-btn');
-    const termsModal = document.getElementById('terms-modal');
-    const termsCloseBtn = document.getElementById('terms-close-btn');
-    const termsCloseXBtn = document.getElementById('terms-close-x');
-
-    const questionEl = document.getElementById('question');
-    const optionsEl = document.getElementById('options');
-    const feedbackEl = document.getElementById('feedback');
-    const questionCounterEl = document.getElementById('question-counter');
-    const scoreEl = document.getElementById('score');
-    const nextBtn = document.getElementById('next-btn');
-    const endPracticeBtn = document.getElementById('end-practice-btn');
-    const endPracticeTopBtn = document.getElementById('end-practice-top');
-    const practiceBanner = document.getElementById('practice-banner');
-    const homeBtn = document.getElementById('home-btn');
-    const siteMessageEl = document.getElementById('site-message');
-    const siteMessageSettingsEl = document.getElementById('site-message-settings');
-    const settingsBtn = document.getElementById('settings-btn');
-    const backHomeBtn = document.getElementById('back-home-btn');
-    const logoutBtn = document.getElementById('logout-btn');
-    const darkModeCheckbox = document.getElementById('dark-mode-checkbox');
-    const timerDisplay = document.getElementById('timer-display');
-    const difficultyIndicator = document.getElementById('difficulty-indicator');
-
-    let playerName = '';
-    let selectedDifficulty = 'easy';
-    let authMode = 'login';
-    let currentQuestion = 0;
-    let score = 0;
-    let currentAnswer = 0;
-    let totalQuestions = 10;
-    let questions = [];
-    let account = null;
-    let isPracticing = false;
-    let quizStartTime = null;
-    let timeRemaining = 30;
-    let timerInterval = null;
-
-    const difficultySettings = {
-      easy: { label: 'Easy', maxDivisor: 5, maxQuotient: 10, totalQuestions: 10 },
-      medium: { label: 'Medium', maxDivisor: 8, maxQuotient: 15, totalQuestions: 12 },
-      hard: { label: 'Hard', maxDivisor: 12, maxQuotient: 20, totalQuestions: 15 }
-    };
-
-    function showScreen(screen) {
-      loginScreen.classList.add('hidden');
-      homeScreen.classList.add('hidden');
-      quizScreen.classList.add('hidden');
-      settingsScreen.classList.add('hidden');
-      screen.classList.remove('hidden');
-    }
-
-    function updateAuthMode(mode) {
-      authMode = mode;
-      showLoginBtn.classList.toggle('active', authMode === 'login');
-      showSignupBtn.classList.toggle('active', authMode === 'signup');
-      authBtn.textContent = authMode === 'login' ? 'Login' : 'Sign Up';
-      authMessage.textContent = authMode === 'login'
-        ? 'Log in to continue your division practice.'
-        : 'Create an account with your name, email, and password.';
-      nameGroup.classList.toggle('hidden', authMode !== 'signup');
-      termsContainer.classList.toggle('hidden', authMode !== 'signup');
-      termsCheckbox.checked = false;
-    }
-
-    function showTermsModal() {
-      termsModal.classList.remove('hidden');
-      termsModal.setAttribute('aria-hidden', 'false');
-    }
-
-    function hideTermsModal() {
-      termsModal.classList.add('hidden');
-      termsModal.setAttribute('aria-hidden', 'true');
-    }
-
-    function updateDifficultyButtons() {
-      difficultyButtons.forEach((btn) => {
-        btn.classList.toggle('active', btn.dataset.difficulty === selectedDifficulty);
-      });
-    }
-
-    function randomInt(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    function generateQuestion() {
-      const config = difficultySettings[selectedDifficulty];
-      const divisor = randomInt(2, config.maxDivisor);
-      const maxQuotient = Math.min(config.maxQuotient, Math.floor(120 / divisor));
-      const quotient = randomInt(2, maxQuotient);
-      const dividend = divisor * quotient;
-      return { dividend, divisor, answer: quotient };
-    }
-
-    function buildQuestions() {
-      const config = difficultySettings[selectedDifficulty];
-      totalQuestions = config.totalQuestions;
-      questions = [];
-      for (let i = 0; i < totalQuestions; i += 1) {
-        questions.push(generateQuestion());
-      }
-    }
-
-    function showQuestion() {
-      if (!isPracticing) {
-        isPracticing = true;
-        // show persistent end-practice controls
-        endPracticeBtn.classList.remove('hidden');
-        endPracticeTopBtn.classList.remove('hidden');
-        practiceBanner.classList.remove('hidden');
-      }
-
-      if (currentQuestion >= totalQuestions) {
-        finishQuiz();
-        return;
-      }
-
-      const q = questions[currentQuestion];
-      currentAnswer = q.answer;
-      questionEl.textContent = `${q.dividend} ÷ ${q.divisor} = ?`;
-      questionCounterEl.textContent = `Question ${currentQuestion + 1}/${totalQuestions}`;
-      scoreEl.textContent = `Score: ${score}`;
-      feedbackEl.textContent = '';
-      feedbackEl.className = 'feedback';
-      nextBtn.classList.add('hidden');
-      homeBtn.classList.add('hidden');
-
-      // Set up timer
-      timeRemaining = 30;
-      clearInterval(timerInterval);
-      updateTimerDisplay();
-      timerInterval = setInterval(updateTimer, 1000);
-
-      const answers = new Set([q.answer]);
-      while (answers.size < 4) {
-        const distractor = q.answer + randomInt(-4, 4);
-        if (distractor > 0) {
-          answers.add(distractor);
-        }
-      }
-
-      const options = Array.from(answers);
-      options.sort(() => Math.random() - 0.5);
-
-      optionsEl.innerHTML = '';
-      options.forEach((value) => {
-        const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.textContent = value;
-        btn.addEventListener('click', () => checkAnswer(value));
-        optionsEl.appendChild(btn);
-      });
-    }
-
-    function updateTimer() {
-      timeRemaining--;
-      updateTimerDisplay();
-      if (timeRemaining <= 0) {
-        clearInterval(timerInterval);
-        checkAnswer(-1); // Auto-fail the question
-      }
-    }
-
-    function updateTimerDisplay() {
-      timerDisplay.textContent = `Time: ${timeRemaining}s`;
-      timerDisplay.classList.remove('warning', 'danger');
-      if (timeRemaining <= 5) {
-        timerDisplay.classList.add('danger');
-      } else if (timeRemaining <= 10) {
-        timerDisplay.classList.add('warning');
-      }
-    }
-
-    function checkAnswer(selected) {
-      const buttons = document.querySelectorAll('.option-btn');
-      buttons.forEach((btn) => {
-        btn.disabled = true;
-      });
-
-      if (selected === currentAnswer) {
-        score += 1;
-        feedbackEl.textContent = 'Correct!';
-        feedbackEl.classList.add('correct');
-      } else {
-        feedbackEl.textContent = `Not quite. The correct answer is ${currentAnswer}.`;
-        feedbackEl.classList.add('wrong');
-      }
-
-      currentQuestion += 1;
-      nextBtn.classList.remove('hidden');
-      endPracticeBtn.classList.remove('hidden');
-    }
-
-    function finishQuiz() {
-      clearInterval(timerInterval);
-      const timeTaken = Math.floor((Date.now() - quizStartTime) / 1000);
-      const minutes = Math.floor(timeTaken / 60);
-      const seconds = timeTaken % 60;
-      const percentage = Math.round((score / totalQuestions) * 100);
-      
-      const timeStr = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
-      
-      questionEl.textContent = `Quiz complete! ${playerName || 'Player'} scored ${score} out of ${totalQuestions}.`;
-      optionsEl.innerHTML = `
-        <div style="grid-column: 1/-1; padding: 12px; background: #f0f4f8; border-radius: 8px;">
-          <p><strong>Accuracy:</strong> ${percentage}%</p>
-          <p><strong>Time Taken:</strong> ${timeStr}</p>
-        </div>
-      `;
-      questionCounterEl.textContent = 'Finished';
-      scoreEl.textContent = `Score: ${score}`;
-      feedbackEl.textContent = 'Great effort!';
-      feedbackEl.className = 'feedback correct';
-      nextBtn.classList.add('hidden');
-      endPracticeBtn.classList.add('hidden');
-      endPracticeTopBtn.classList.add('hidden');
-      practiceBanner.classList.add('hidden');
-      homeBtn.classList.remove('hidden');
-      timerDisplay.textContent = `Completed in ${timeStr}`;
-      timerDisplay.classList.remove('warning', 'danger');
-      // save to leaderboard
-      try { addToLeaderboard(playerName || 'Player', score, selectedDifficulty); } catch (e) { console.warn('Failed to add to leaderboard', e); }
-      isPracticing = false;
-    }
-
-    function startQuiz() {
-      currentQuestion = 0;
-      score = 0;
-      quizStartTime = Date.now();
-      buildQuestions();
-      const difficultyLabel = difficultySettings[selectedDifficulty].label;
-      difficultyIndicator.textContent = `${difficultyLabel} Mode`;
-      showQuestion();
-      showScreen(quizScreen);
-      isPracticing = true;
-      endPracticeBtn.classList.remove('hidden');
-      endPracticeTopBtn.classList.remove('hidden');
-      practiceBanner.classList.remove('hidden');
-    }
-
-    function updateProfileDisplay() {
-      profileNameText.textContent = account.fullName;
-      profileEmailText.textContent = account.email;
-    }
-
-    function openProfileEdit() {
-      profileNameInput.value = account.fullName;
-      profileEmailInput.value = account.email;
-      profilePasswordInput.value = '';
-      profileEditArea.classList.remove('hidden');
-    }
-
-    function closeProfileEdit() {
-      profileEditArea.classList.add('hidden');
-    }
-
-    function saveAccount() {
-      if (account) {
-        localStorage.setItem('divisionQuizAccount', JSON.stringify(account));
-      }
-    }
-
-    function loadAccount() {
-      try {
-        const stored = localStorage.getItem('divisionQuizAccount');
-        if (stored) {
-          account = JSON.parse(stored);
-          playerName = account.fullName;
-          welcomeMessage.textContent = `${playerName}, choose a difficulty and start practicing.`;
-          updateProfileDisplay();
-          updateDifficultyButtons();
-          showScreen(homeScreen);
-          return true;
-        }
-      } catch (error) {
-        console.warn('Failed to load account from localStorage', error);
-      }
-      return false;
-    }
-
-    function toggleDarkMode() {
-      const isDark = document.documentElement.classList.toggle('dark-mode');
-      localStorage.setItem('darkMode', isDark);
-      darkModeCheckbox.checked = isDark;
-    }
-
-    function loadDarkModePreference() {
-      const isDark = localStorage.getItem('darkMode') === 'true';
-      if (isDark) {
-        document.documentElement.classList.add('dark-mode');
-        darkModeCheckbox.checked = true;
-      }
-    }
-
-    function handleAuth() {
-      const email = emailInput.value.trim();
-      const password = passwordInput.value.trim();
-      const fullName = nameInput.value.trim();
-
-      if (!email || !password || (authMode === 'signup' && !fullName)) {
-        authMessage.textContent = authMode === 'signup'
-          ? 'Please enter your name, email, and password.'
-          : 'Please enter both email and password.';
-        return;
-      }
-
-      if (authMode === 'signup' && !termsCheckbox.checked) {
-        authMessage.textContent = 'You must agree to the Terms and Conditions to sign up.';
-        return;
-      }
-
-      if (authMode === 'signup') {
-        account = { fullName, email, password };
-        saveAccount();
-      } else {
-        if (!account) {
-          if (!loadAccount()) {
-            authMessage.textContent = 'No account found. Please sign up first.';
-            return;
-          }
-        }
-        if (account.email !== email || account.password !== password) {
-          authMessage.textContent = 'Wrong login details or account does not exist.';
-          return;
-        }
-      }
-
-      playerName = account.fullName;
-      welcomeMessage.textContent = `${playerName}, choose a difficulty and start practicing.`;
-      updateProfileDisplay();
-      closeProfileEdit();
-      updateDifficultyButtons();
-      showScreen(homeScreen);
-    }
-
-    authBtn.addEventListener('click', handleAuth);
-    showLoginBtn.addEventListener('click', () => updateAuthMode('login'));
-    showSignupBtn.addEventListener('click', () => updateAuthMode('signup'));
-    viewTermsLink.addEventListener('click', showTermsModal);
-    viewTermsSettingsBtn.addEventListener('click', showTermsModal);
-    termsCloseBtn.addEventListener('click', hideTermsModal);
-    termsCloseXBtn.addEventListener('click', hideTermsModal);
-    editProfileBtn.addEventListener('click', openProfileEdit);
-    saveProfileBtn.addEventListener('click', () => {
-      const newName = profileNameInput.value.trim();
-      const newEmail = profileEmailInput.value.trim();
-      const newPassword = profilePasswordInput.value.trim();
-
-      if (!newName || !newEmail) {
-        showSiteMessageSettings('Name and email are required to save your profile.', 'error');
-        return;
-      }
-
-      account.fullName = newName;
-      account.email = newEmail;
-      if (newPassword) {
-        account.password = newPassword;
-      }
-      saveAccount();
-      playerName = account.fullName;
-      welcomeMessage.textContent = `${playerName}, choose a difficulty and start practicing.`;
-      updateProfileDisplay();
-      closeProfileEdit();
-      showSiteMessageSettings('Profile saved successfully!', 'success');
-    });
-    cancelProfileBtn.addEventListener('click', () => {
-      closeProfileEdit();
-    });
-    startBtn.addEventListener('click', startQuiz);
-    settingsBtn.addEventListener('click', () => {
-      closeProfileEdit();
-      showScreen(settingsScreen);
-    });
-    backHomeBtn.addEventListener('click', () => {
-      closeProfileEdit();
-      showScreen(homeScreen);
-    });
-    logoutBtn.addEventListener('click', () => {
-      showConfirmModal('Logout', 'Are you sure you want to logout?', () => {
-        account = null;
-        playerName = '';
-        localStorage.removeItem('divisionQuizAccount');
-        showScreen(loginScreen);
-        emailInput.value = '';
-        passwordInput.value = '';
-        nameInput.value = '';
-      });
-    });
-    darkModeCheckbox.addEventListener('change', toggleDarkMode);
-
-    difficultyButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        selectedDifficulty = btn.dataset.difficulty;
-        updateDifficultyButtons();
-      });
-    });
-
-    nextBtn.addEventListener('click', () => {
-      showQuestion();
-    });
-    
-
-    window.addEventListener('beforeunload', (event) => {
-      if (isPracticing) {
-        event.preventDefault();
-        event.returnValue = '';
-        return '';
-      }
-    });
-
-    const confirmModal = document.getElementById('confirm-modal');
-    const confirmYes = document.getElementById('confirm-yes');
-    const confirmCancel = document.getElementById('confirm-cancel');
-    const modalTitle = document.getElementById('modal-title');
-    const modalMessage = document.getElementById('modal-message');
-
-    let confirmCallback = null;
-    function showConfirmModal(title, message, onConfirm) {
-      modalTitle.textContent = title;
-      modalMessage.textContent = message;
-      confirmCallback = onConfirm;
-      confirmModal.classList.remove('hidden');
-      confirmModal.setAttribute('aria-hidden', 'false');
-      confirmYes.focus();
-    }
-
-    function hideConfirmModal() {
-      confirmModal.classList.add('hidden');
-      confirmModal.setAttribute('aria-hidden', 'true');
-      confirmCallback = null;
-    }
-
-    confirmYes.addEventListener('click', () => {
-      if (typeof confirmCallback === 'function') confirmCallback();
-      hideConfirmModal();
-    });
-    confirmCancel.addEventListener('click', () => hideConfirmModal());
-
-    function endPracticeConfirm() {
-      showConfirmModal('End Practice', 'Are you sure you want to end your practice session?', () => {
-        isPracticing = false;
-        endPracticeBtn.classList.add('hidden');
-        endPracticeTopBtn.classList.add('hidden');
-        practiceBanner.classList.add('hidden');
-        showScreen(homeScreen);
-      });
-    }
-
-    endPracticeBtn.addEventListener('click', endPracticeConfirm);
-    endPracticeTopBtn.addEventListener('click', endPracticeConfirm);
-
-    homeBtn.addEventListener('click', () => {
-      showConfirmModal('End Practice', 'Are you sure you want to end your practice session and go back to home?', () => {
-        isPracticing = false;
-        endPracticeBtn.classList.add('hidden');
-        endPracticeTopBtn.classList.add('hidden');
-        practiceBanner.classList.add('hidden');
-        showScreen(homeScreen);
-      });
-    });
-
-    // Leaderboard / Export / Import
-    const leaderboardBtn = document.getElementById('leaderboard-btn');
-    const exportBtn = document.getElementById('export-btn');
-    const importFileInput = document.getElementById('import-file');
-    const leaderboardModal = document.getElementById('leaderboard-modal');
-    const leaderboardTableBody = document.querySelector('#leaderboard-table tbody');
-    const closeLeaderboardBtn = document.getElementById('close-leaderboard');
-
-    function getLeaderboard() {
-      try {
-        const raw = localStorage.getItem('divisionQuizLeaderboard');
-        return raw ? JSON.parse(raw) : [];
-      } catch (e) {
-        console.warn('Invalid leaderboard in storage', e);
-        return [];
-      }
-    }
-
-    function saveLeaderboard(list) {
-      try {
-        localStorage.setItem('divisionQuizLeaderboard', JSON.stringify(list));
-      } catch (e) {
-        console.error('Failed to save leaderboard', e);
-      }
-    }
-
-    function addToLeaderboard(name, scoreVal, difficulty) {
-      const list = getLeaderboard();
-      list.push({ 
-        name: name || 'Player', 
-        score: Number(scoreVal) || 0, 
-        totalQuestions: totalQuestions,
-        difficulty: difficulty || 'easy', 
-        date: new Date().toISOString() 
-      });
-      list.sort((a, b) => b.score - a.score || new Date(b.date) - new Date(a.date));
-      saveLeaderboard(list);
-    }
-
-    function renderLeaderboard() {
-      const list = getLeaderboard();
-      leaderboardTableBody.innerHTML = '';
-      
-      // Sort and filter: show top 10 overall
-      const topScores = list
-        .sort((a, b) => b.score - a.score || new Date(b.date) - new Date(a.date))
-        .slice(0, 10);
-      
-      if (!topScores.length) {
-        const tr = document.createElement('tr');
-        tr.innerHTML = '<td colspan="4" style="padding:8px;">No results yet.</td>';
-        leaderboardTableBody.appendChild(tr);
-        return;
-      }
-      topScores.forEach((entry, idx) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td style="padding:6px;">#${idx + 1} ${entry.name}</td><td style="padding:6px;">${entry.score}/${entry.totalQuestions || 10}</td><td style="padding:6px;"><strong>${entry.difficulty}</strong></td><td style="padding:6px;">${new Date(entry.date).toLocaleString()}</td>`;
-        leaderboardTableBody.appendChild(tr);
-      });
-    }
-
-    function showLeaderboardModal() {
-      renderLeaderboard();
-      leaderboardModal.classList.remove('hidden');
-      leaderboardModal.setAttribute('aria-hidden', 'false');
-    }
-    function hideLeaderboardModal() {
-      leaderboardModal.classList.add('hidden');
-      leaderboardModal.setAttribute('aria-hidden', 'true');
-    }
-
-    function showSiteMessage(message, type = 'success') {
-      if (!siteMessageEl) return;
-      siteMessageEl.textContent = message;
-      siteMessageEl.className = `status-message ${type === 'error' ? 'status-error' : 'status-success'}`;
-      siteMessageEl.classList.remove('hidden');
-      setTimeout(() => {
-        if (siteMessageEl) siteMessageEl.classList.add('hidden');
-      }, 5000);
-    }
-
-    function showSiteMessageSettings(message, type = 'success') {
-      if (!siteMessageSettingsEl) return;
-      siteMessageSettingsEl.textContent = message;
-      siteMessageSettingsEl.className = `status-message ${type === 'error' ? 'status-error' : 'status-success'}`;
-      siteMessageSettingsEl.classList.remove('hidden');
-      setTimeout(() => {
-        if (siteMessageSettingsEl) siteMessageSettingsEl.classList.add('hidden');
-      }, 5000);
-    }
-
-    function exportData() {
-      const payload = { account: null, leaderboard: [] };
-      try { payload.account = JSON.parse(localStorage.getItem('divisionQuizAccount') || 'null'); } catch {};
-      try { payload.leaderboard = JSON.parse(localStorage.getItem('divisionQuizLeaderboard') || '[]'); } catch {}
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'division-quiz-data.json';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    function handleImportFile(e) {
-      const file = e.target.files && e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          const data = JSON.parse(reader.result);
-          const hasAccount = data && typeof data === 'object' && data.account && typeof data.account === 'object';
-          const hasLeaderboard = data && typeof data === 'object' && Array.isArray(data.leaderboard);
-          if (!hasAccount && !hasLeaderboard) {
-            showSiteMessage('File does not contain valid account or leaderboard data.', 'error');
-            return;
-          }
-          showConfirmModal('Import Data', 'Importing will overwrite existing account and leaderboard. Continue?', () => {
-            const ok = importData(data);
-            if (ok) {
-              showSiteMessage('Import completed successfully.', 'success');
-            } else {
-              showSiteMessage('No valid data found to import.', 'error');
-            }
-          });
-        } catch (err) {
-          showSiteMessage('Invalid JSON file.', 'error');
-        }
-      };
-      reader.readAsText(file);
-      // reset input so same file can be chosen again
-      importFileInput.value = '';
-    }
-
-    function importData(obj) {
-      if (!obj || typeof obj !== 'object') return false;
-      let changed = false;
-      if (obj.account && typeof obj.account === 'object') {
-        try { localStorage.setItem('divisionQuizAccount', JSON.stringify(obj.account)); account = obj.account; playerName = account.fullName; changed = true; } catch (e) { console.warn(e); }
-      }
-      if (Array.isArray(obj.leaderboard)) {
-        try { localStorage.setItem('divisionQuizLeaderboard', JSON.stringify(obj.leaderboard)); changed = true; } catch (e) { console.warn(e); }
-      }
-      if (changed) updateProfileDisplay();
-      return changed;
-    }
-
-    if (leaderboardBtn) leaderboardBtn.addEventListener('click', showLeaderboardModal);
-    if (exportBtn) exportBtn.addEventListener('click', exportData);
-    if (importFileInput) importFileInput.addEventListener('change', handleImportFile);
-    if (closeLeaderboardBtn) closeLeaderboardBtn.addEventListener('click', hideLeaderboardModal);
-    // clear button removed per user request
-
-    const hasStoredAccount = loadAccount();
-    if (!hasStoredAccount) {
-      showScreen(loginScreen);
-    }
-    loadDarkModePreference();
-    updateAuthMode('login');
+  }
+
+  currentQuestion++;
+  scoreEl.textContent = `Score: ${score}`;
+  saveSession();
+  nextBtn.classList.remove('hidden');
+}
+
+function finishQuiz() {
+  clearInterval(timerInterval);
+  isPracticing = false;
+  clearSession();
+
+  const elapsed = Math.floor((Date.now()-quizStartTime)/1000);
+  const mins = Math.floor(elapsed/60), secs = elapsed%60;
+  const timeStr = mins>0?`${mins}m ${secs}s`:`${secs}s`;
+  const pct = Math.round((score/totalQuestions)*100);
+
+  questionEl.textContent = `Quiz complete! ${playerName||'Player'} scored ${score}/${totalQuestions}`;
+  optionsEl.innerHTML = `<div class="results-card">
+    <p>🎯 <strong>Accuracy:</strong> ${pct}%</p>
+    <p>⏱ <strong>Time:</strong> ${timeStr}</p>
+    <p>${pct>=80?'🌟 Excellent!':pct>=50?'👍 Good effort!':'💪 Keep practising!'}</p>
+  </div>`;
+  timerDisplay.textContent = `✅ Completed in ${timeStr}`;
+  timerDisplay.className = 'timer-display';
+  timerBar.style.width = '100%';
+  timerBar.style.background = '#16a34a';
+  questionCounterEl.textContent = 'Finished';
+  scoreEl.textContent = `Score: ${score}/${totalQuestions}`;
+  feedbackEl.textContent = '';
+
+  // Hide banner; show result buttons
+  practiceBanner.classList.add('hidden');
+  nextBtn.classList.add('hidden');
+  homeBtn.classList.remove('hidden');
+  shareScoreBtn.classList.remove('hidden');
+
+  addToLB(playerName||'Player', score, selectedDifficulty);
+}
+
+function launchQuiz(fresh) {
+  if (fresh) {
+    clearSession();
+    currentQuestion = 0; score = 0;
+    quizStartTime = Date.now();
+    totalQuestions = DIFF[selectedDifficulty].totalQuestions;
+    questions = Array.from({length: totalQuestions}, genQ);
+    difficultyIndicator.textContent = `${DIFF[selectedDifficulty].label} Mode`;
+  } else {
+    // Resume
+    const s = checkResume();
+    if (!s) { launchQuiz(true); return; }
+    questions       = s.questions;
+    currentQuestion = s.currentQuestion;
+    score           = s.score;
+    selectedDifficulty = s.selectedDifficulty;
+    totalQuestions  = s.totalQuestions;
+    quizStartTime   = s.quizStartTime || Date.now();
     updateDifficultyButtons();
-  </script>
+    difficultyIndicator.textContent = `${DIFF[selectedDifficulty].label} Mode (Resumed)`;
+  }
+
+  isPracticing = true;
+  practiceBanner.classList.remove('hidden');
+  homeBtn.classList.add('hidden');
+  shareScoreBtn.classList.add('hidden');
+  nextBtn.classList.add('hidden');
+  showScreen(quizScreen);
+  showQuestion();
+}
+
+startBtn.addEventListener('click',  () => launchQuiz(true));
+resumeBtn.addEventListener('click', () => launchQuiz(false));
+nextBtn.addEventListener('click', showQuestion);
+
+// Save & Exit — saves session and goes home
+saveExitBtn.addEventListener('click', () => {
+  confirm_('Save & Exit', 'Your progress will be saved. You can resume later from the home screen.', () => {
+    clearInterval(timerInterval);
+    saveSession();
+    isPracticing = false;
+    practiceBanner.classList.add('hidden');
+    refreshHome();
+    showScreen(homeScreen);
+  });
+});
+
+// End (discard)
+endPracticeTopBtn.addEventListener('click', () => {
+  confirm_('End Practice', 'End practice? Your progress will NOT be saved.', () => {
+    clearInterval(timerInterval);
+    clearSession();
+    isPracticing = false;
+    practiceBanner.classList.add('hidden');
+    refreshHome();
+    showScreen(homeScreen);
+  });
+});
+
+homeBtn.addEventListener('click', () => {
+  confirm_('Back to Home', 'Go back to the home screen?', () => {
+    clearInterval(timerInterval);
+    isPracticing = false;
+    practiceBanner.classList.add('hidden');
+    shareScoreBtn.classList.add('hidden');
+    refreshHome();
+    showScreen(homeScreen);
+  });
+});
+
+// Share
+shareScoreBtn.addEventListener('click', () => {
+  const pct  = Math.round((score/totalQuestions)*100);
+  const text = `🏆 I scored ${score}/${totalQuestions} (${pct}%) on Division Quiz — ${DIFF[selectedDifficulty].label} mode! Can you beat me?`;
+  if (navigator.share) { navigator.share({title:'Division Quiz',text}).catch(()=>{}); }
+  else { navigator.clipboard.writeText(text).then(()=>showMsg(siteMessageEl,'Score copied!')).catch(()=>prompt('Copy:',text)); }
+});
+
+// Settings nav
+settingsBtn.addEventListener('click', () => { profileEditArea.classList.add('hidden'); showScreen(settingsScreen); });
+backHomeBtn.addEventListener('click', () => { profileEditArea.classList.add('hidden'); refreshHome(); showScreen(homeScreen); });
+
+logoutBtn.addEventListener('click', () => {
+  confirm_('Logout', 'Are you sure you want to logout?', () => {
+    account = null; playerName = '';
+    emailInput.value=''; passwordInput.value=''; nameInput.value='';
+    setAuthMode('login');
+    showScreen(loginScreen);
+  });
+});
+
+// Export / Import
+exportBtn.addEventListener('click', () => {
+  const payload = {
+    account:     JSON.parse(localStorage.getItem('divisionQuizAccount')    ||'null'),
+    leaderboard: JSON.parse(localStorage.getItem('divisionQuizLeaderboard')||'[]')
+  };
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));
+  a.download = 'division-quiz-data.json'; a.click();
+});
+importFileInput.addEventListener('change', e => {
+  const file = e.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const d = JSON.parse(r.result);
+      confirm_('Import', 'This will overwrite existing data. Continue?', () => {
+        if (d.account)     { localStorage.setItem('divisionQuizAccount', JSON.stringify(d.account)); account=d.account; playerName=account.fullName; updateProfileDisplay(); }
+        if (d.leaderboard) { localStorage.setItem('divisionQuizLeaderboard', JSON.stringify(d.leaderboard)); }
+        showMsg(siteMessageSetEl, 'Import successful!');
+      });
+    } catch { showMsg(siteMessageSetEl,'Invalid file.','error'); }
+  };
+  r.readAsText(file);
+  importFileInput.value='';
+});
+
+// Keyboard 1-4
+document.addEventListener('keydown', e => {
+  if (!isPracticing || !nextBtn.classList.contains('hidden')) return;
+  if (['1','2','3','4'].includes(e.key)) {
+    const btn = document.querySelector(`.option-btn[data-key="${e.key}"]:not([disabled])`);
+    if (btn) btn.click();
+  }
+});
+
+window.addEventListener('beforeunload', e => {
+  if (isPracticing) { e.preventDefault(); e.returnValue=''; }
+});
+
+// ── Init ──────────────────────────────────────────────────────
+setAuthMode('login');
+updateDifficultyButtons();
+try {
+  const raw = localStorage.getItem('divisionQuizAccount');
+  if (raw) {
+    account = JSON.parse(raw);
+    playerName = account.fullName;
+    goHome();
+  } else {
+    showScreen(loginScreen);
+  }
+} catch(e) { showScreen(loginScreen); }
+</script>
 </body>
 </html>
